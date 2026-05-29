@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Kingdom Of Arcanum</string>
+    <string name="action_go">Go</string>
+    <string name="baking_title">Baking with Gemini</string>
+    <string name="label_prompt">Prompt</string>
+    <string name="prompt_placeholder">Provide a recipe for the baked goods in the image</string>
+    <string name="image1_description">Cupcake</string>
+    <string name="image2_description">Cookies</string>
+    <string name="image3_description">Cake</string>
+    <string name="results_placeholder">(Results will appear here)</string>
+
+    <!-- Login Screen -->
+    <string name="login_email_label">E-mail</string>
+    <string name="login_password_label">Senha</string>
+    <string name="login_button">Entrar</string>
+    <string name="login_or_divider">ou</string>
+    <string name="login_google_button">Entrar com Google</string>
+    <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
+    <string name="default_web_client_id" translatable="false">561921512655-02afq638tkqrunfa4j5shfdb8fans5r7.apps.googleusercontent.com</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Criar Conta</string>
+    <string name="register_confirm_password_label">Confirmar Senha</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="register_login_link">Já tem uma conta? Faça login</string>
+    <string name="register_password_hide">Ocultar</string>
+    <string name="register_password_show">Mostrar</string>
+    <string name="register_error_passwords_mismatch">As senhas não coincidem</string>
+    <string name="register_req_min_length">Mínimo 8 caracteres</string>
+    <string name="register_req_uppercase">Pelo menos uma letra maiúscula</string>
+    <string name="register_req_number">Pelo menos um número</string>
+
+    <!-- Splash Screen -->
+    <string name="splash_part1">Kingdom Of</string>
+    <string name="splash_part2">Arcanum</string>
+    <string name="splash_subtitle">Magia e Tecnologia</string>
+
+    <!-- Settings & AppBar -->
+    <string name="settings_title">Configurações</string>
+    <string name="logout_button">Sair</string>
+    <string name="settings_button_description">Configurações</string>
+</resources>

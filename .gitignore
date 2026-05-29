@@ -1,0 +1,24 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Logs
+hs_err_pid*
+
+# Secrets and sensitive files
+local.properties
+google-services.json
+*.jks
+*.keystore
+*.p12
+google-services-*.json
+mock-google-services.json
+release-key.properties
+secrets.properties
