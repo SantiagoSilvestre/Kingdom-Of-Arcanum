@@ -40,6 +40,9 @@ class CharacterDetailViewModel @Inject constructor(
     private val _strength = mutableStateOf("0")
     val strength: State<String> = _strength
 
+    private val _agility = mutableStateOf("0")
+    val agility: State<String> = _agility
+
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
@@ -68,6 +71,7 @@ class CharacterDetailViewModel @Inject constructor(
                 _lore.value = it.lore
                 _intelligence.value = it.intelligence.toString()
                 _strength.value = it.strength.toString()
+                _agility.value = it.agility.toString()
             }
             _isLoading.value = false
         }
@@ -101,6 +105,10 @@ class CharacterDetailViewModel @Inject constructor(
         if (isNewCharacter) _strength.value = newValue
     }
 
+    fun onAgilityChange(newValue: String) {
+        if (isNewCharacter) _agility.value = newValue
+    }
+
     fun saveCharacter() {
         if (_name.value.isBlank()) return
 
@@ -108,6 +116,7 @@ class CharacterDetailViewModel @Inject constructor(
             _isLoading.value = true
             val intVal = _intelligence.value.toIntOrNull() ?: 0
             val strVal = _strength.value.toIntOrNull() ?: 0
+            val agiVal = _agility.value.toIntOrNull() ?: 0
             
             val character = Character(
                 id = if (characterId == "new") "" else characterId ?: "",
@@ -118,6 +127,7 @@ class CharacterDetailViewModel @Inject constructor(
                 lore = _lore.value,
                 intelligence = intVal,
                 strength = strVal,
+                agility = agiVal,
                 maxHp = strVal * 5,
                 currentHp = strVal * 5,
                 maxMana = intVal * 5,

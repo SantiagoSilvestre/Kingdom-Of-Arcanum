@@ -10,7 +10,6 @@ import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_list.
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_sheet.CharacterSheetScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.login.LoginScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.register.RegisterScreen
-import br.com.silvestresantiago732.kingdomofarcanum.presentation.settings.SettingsScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.splash.SplashScreen
 
 sealed class Screen(val route: String) {
@@ -18,7 +17,6 @@ sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Register : Screen("register")
     object Home : Screen("home")
-    object Settings : Screen("settings")
     object CharacterImage : Screen("character_image/{characterId}") {
         fun createRoute(characterId: String) = "character_image/$characterId"
     }
@@ -104,9 +102,6 @@ fun NavGraph(navController: NavHostController) {
             CharacterDetailScreen(
                 onBack = { navController.popBackStack() }
             )
-        }
-        composable(Screen.Settings.route) {
-            SettingsScreen()
         }
     }
 }

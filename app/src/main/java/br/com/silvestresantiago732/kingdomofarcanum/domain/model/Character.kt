@@ -17,6 +17,7 @@ data class Character(
     val maxXp: Int = 100,
     val intelligence: Int = 0,
     val strength: Int = 0,
+    val agility: Int = 0,
     val gold: Int = 0,
     val attributePoints: Int = 0,
     val skills: List<Skill> = emptyList(),

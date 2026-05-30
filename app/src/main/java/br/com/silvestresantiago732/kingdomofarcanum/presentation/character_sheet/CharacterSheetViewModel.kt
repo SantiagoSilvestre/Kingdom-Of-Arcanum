@@ -50,19 +50,21 @@ class CharacterSheetViewModel @Inject constructor(
         saveCharacter(updatedChar)
     }
 
-    fun spendPoints(intelligenceIncrease: Int, strengthIncrease: Int) {
+    fun spendPoints(intelligenceIncrease: Int, strengthIncrease: Int, agilityIncrease: Int) {
         val currentChar = _character.value ?: return
-        val totalCost = intelligenceIncrease + strengthIncrease
+        val totalCost = intelligenceIncrease + strengthIncrease + agilityIncrease
         if (totalCost > currentChar.attributePoints) return
 
         val newInt = currentChar.intelligence + intelligenceIncrease
         val newStr = currentChar.strength + strengthIncrease
+        val newAgi = currentChar.agility + agilityIncrease
         val newMaxHp = newStr * 5
         val newMaxMana = newInt * 5
 
         var updatedChar = currentChar.copy(
             intelligence = newInt,
             strength = newStr,
+            agility = newAgi,
             attributePoints = currentChar.attributePoints - totalCost,
             maxHp = newMaxHp,
             currentHp = if (currentChar.currentHp > newMaxHp) newMaxHp else currentChar.currentHp,

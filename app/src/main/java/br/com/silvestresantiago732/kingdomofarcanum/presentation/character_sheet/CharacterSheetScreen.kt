@@ -1,10 +1,15 @@
 package br.com.silvestresantiago732.kingdomofarcanum.presentation.character_sheet
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -14,6 +19,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
@@ -113,8 +119,8 @@ fun CharacterSheetScreen(
         AttributePointsDialog(
             character = character!!,
             onDismiss = { showAttributePointsDialog = false },
-            onConfirm = { intInc, strInc ->
-                viewModel.spendPoints(intInc, strInc)
+            onConfirm = { intInc, strInc, agiInc ->
+                viewModel.spendPoints(intInc, strInc, agiInc)
                 showAttributePointsDialog = false
             }
         )
@@ -248,7 +254,8 @@ fun CharacterSheetScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
-                            .padding(16.dp),
+                            .padding(16.dp)
+                            .imePadding(),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
                         // Barra de Vida
@@ -312,6 +319,13 @@ fun CharacterSheetScreen(
                             EditableAttribute(
                                 label = "For",
                                 value = char.strength,
+                                onValueChange = { },
+                                modifier = Modifier.weight(1f),
+                                enabled = false
+                            )
+                            EditableAttribute(
+                                label = "Agi",
+                                value = char.agility,
                                 onValueChange = { },
                                 modifier = Modifier.weight(1f),
                                 enabled = false
@@ -398,7 +412,12 @@ fun GoldControlDialog(
         onDismissRequest = onDismiss,
         title = { Text("Gerenciar Ouro") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Text("Ouro atual: $currentGold", style = MaterialTheme.typography.bodyLarge)
                 OutlinedTextField(
                     value = amountText,
@@ -441,17 +460,23 @@ fun GoldControlDialog(
 fun AttributePointsDialog(
     character: br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character,
     onDismiss: () -> Unit,
-    onConfirm: (Int, Int) -> Unit
+    onConfirm: (Int, Int, Int) -> Unit
 ) {
     var intIncrease by remember { mutableIntStateOf(0) }
     var strIncrease by remember { mutableIntStateOf(0) }
-    val pointsLeft = character.attributePoints - (intIncrease + strIncrease)
+    var agiIncrease by remember { mutableIntStateOf(0) }
+    val pointsLeft = character.attributePoints - (intIncrease + strIncrease + agiIncrease)
 
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Distribuir Pontos") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 Text("Pontos disponíveis: $pointsLeft", fontWeight = FontWeight.Bold)
                 
                 AttributeControl(
@@ -471,12 +496,21 @@ fun AttributePointsDialog(
                     canDecrease = strIncrease > 0,
                     onDecrease = { strIncrease-- }
                 )
+
+                AttributeControl(
+                    label = "Agilidade",
+                    currentValue = character.agility + agiIncrease,
+                    canIncrease = pointsLeft > 0,
+                    onIncrease = { agiIncrease++ },
+                    canDecrease = agiIncrease > 0,
+                    onDecrease = { agiIncrease-- }
+                )
             }
         },
         confirmButton = {
             Button(
-                onClick = { onConfirm(intIncrease, strIncrease) },
-                enabled = (intIncrease + strIncrease) > 0
+                onClick = { onConfirm(intIncrease, strIncrease, agiIncrease) },
+                enabled = (intIncrease + strIncrease + agiIncrease) > 0
             ) {
                 Text("Salvar")
             }
@@ -544,45 +578,111 @@ fun SkillListTab(
     onDeleteSkill: (Skill) -> Unit,
     onUseSkill: (Skill) -> Unit
 ) {
+    val listState = rememberLazyListState()
+
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        Button(onClick = onAddSkill, modifier = Modifier.align(Alignment.End)) {
-            Icon(Icons.Default.Add, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text("Adicionar Habilidade")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (skills.size >= 1) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        "Role para ver mais",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                Spacer(modifier = Modifier.width(1.dp))
+            }
+            
+            Button(onClick = onAddSkill) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text("Adicionar Habilidade")
+            }
         }
         
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp)
+                .padding(top = 8.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp)
+                )
         ) {
-            items(skills) { skill ->
-                val canUse = currentMana >= skill.manaCost
-                ListItem(
-                    modifier = Modifier.clickable { onEditSkill(skill) },
-                    headlineContent = { Text(skill.name, fontWeight = FontWeight.Bold) },
-                    supportingContent = { 
-                        Text("${skill.damage} - ${skill.observation}\nCusto de Mana: ${skill.manaCost}") 
-                    },
-                    trailingContent = {
-                        Row {
-                            IconButton(
-                                onClick = { onUseSkill(skill) },
-                                enabled = canUse
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.PlayArrow, 
-                                    contentDescription = "Usar Habilidade",
-                                    tint = if (canUse) Color(0xFF4CAF50) else Color.Gray
-                                )
-                            }
-                            IconButton(onClick = { onDeleteSkill(skill) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(skills) { skill ->
+                    val canUse = currentMana >= skill.manaCost
+                    ListItem(
+                        modifier = Modifier.clickable { onEditSkill(skill) },
+                        headlineContent = { Text(skill.name, fontWeight = FontWeight.Bold) },
+                        supportingContent = { 
+                            Text("${skill.damage} - ${skill.observation}\nCusto de Mana: ${skill.manaCost}") 
+                        },
+                        trailingContent = {
+                            Row {
+                                IconButton(
+                                    onClick = { onUseSkill(skill) },
+                                    enabled = canUse
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.PlayArrow, 
+                                        contentDescription = "Usar Habilidade",
+                                        tint = if (canUse) Color(0xFF4CAF50) else Color.Gray
+                                    )
+                                }
+                                IconButton(onClick = { onDeleteSkill(skill) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
+                                }
                             }
                         }
-                    }
-                )
-                HorizontalDivider()
+                    )
+                    HorizontalDivider()
+                }
+            }
+
+            // Barra de rolagem visual customizada
+            if (skills.size >= 1) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxHeight()
+                        .width(4.dp)
+                        .padding(vertical = 4.dp, horizontal = 1.dp)
+                        .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
+                ) {
+                    val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
+                    val totalItems = skills.size.toFloat()
+                    val visibleItems = 3f
+                    val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
+                    val canScroll = totalItems > visibleItems
+                    val scrollThumbOffset = if (canScroll) {
+                        (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
+                    } else 0.dp
+
+                    Box(
+                        modifier = Modifier
+                            .offset(y = scrollThumbOffset)
+                            .height(scrollThumbHeight)
+                            .fillMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
+                    )
+                }
             }
         }
     }
@@ -595,30 +695,96 @@ fun ItemListTab(
     onEditItem: (Item) -> Unit,
     onDeleteItem: (Item) -> Unit
 ) {
+    val listState = rememberLazyListState()
+
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-        Button(onClick = onAddItem, modifier = Modifier.align(Alignment.End)) {
-            Icon(Icons.Default.Add, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text("Adicionar Item")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (items.size >= 1) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        "Role para ver mais",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                Spacer(modifier = Modifier.width(1.dp))
+            }
+
+            Button(onClick = onAddItem) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(Modifier.width(4.dp))
+                Text("Adicionar Item")
+            }
         }
         
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp)
-        ) {
-            items(items) { item ->
-                ListItem(
-                    modifier = Modifier.clickable { onEditItem(item) },
-                    headlineContent = { Text(item.name, fontWeight = FontWeight.Bold) },
-                    supportingContent = { Text("${item.damage} - ${item.observation}") },
-                    trailingContent = {
-                        IconButton(onClick = { onDeleteItem(item) }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
-                        }
-                    }
+                .padding(top = 8.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp)
                 )
-                HorizontalDivider()
+        ) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(items) { item ->
+                    ListItem(
+                        modifier = Modifier.clickable { onEditItem(item) },
+                        headlineContent = { Text(item.name, fontWeight = FontWeight.Bold) },
+                        supportingContent = { Text("${item.damage} - ${item.observation}") },
+                        trailingContent = {
+                            IconButton(onClick = { onDeleteItem(item) }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
+                            }
+                        }
+                    )
+                    HorizontalDivider()
+                }
+            }
+
+            // Barra de rolagem visual customizada
+            if (items.size >= 1) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .fillMaxHeight()
+                        .width(4.dp)
+                        .padding(vertical = 4.dp, horizontal = 1.dp)
+                        .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
+                ) {
+                    val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
+                    val totalItems = items.size.toFloat()
+                    val visibleItems = 3f
+                    val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
+                    val canScroll = totalItems > visibleItems
+                    val scrollThumbOffset = if (canScroll) {
+                        (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
+                    } else 0.dp
+
+                    Box(
+                        modifier = Modifier
+                            .offset(y = scrollThumbOffset)
+                            .height(scrollThumbHeight)
+                            .fillMaxWidth()
+                            .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
+                    )
+                }
             }
         }
     }
@@ -671,7 +837,12 @@ fun EntryDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nome") })
                 if (isSkill) {
                     OutlinedTextField(

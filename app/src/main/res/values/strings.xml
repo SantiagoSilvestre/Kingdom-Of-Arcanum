@@ -36,7 +36,5 @@
     <string name="splash_subtitle">Magia e Tecnologia</string>
 
     <!-- Settings & AppBar -->
-    <string name="settings_title">Configurações</string>
     <string name="logout_button">Sair</string>
-    <string name="settings_button_description">Configurações</string>
 </resources>

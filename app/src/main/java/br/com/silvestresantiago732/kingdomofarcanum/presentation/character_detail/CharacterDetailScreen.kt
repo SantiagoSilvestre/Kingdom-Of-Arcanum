@@ -29,6 +29,7 @@ fun CharacterDetailScreen(
     val lore by viewModel.lore
     val intelligence by viewModel.intelligence
     val strength by viewModel.strength
+    val agility by viewModel.agility
     val isLoading by viewModel.isLoading
     val isSaved by viewModel.isSaved
     val isNewCharacter = viewModel.isNewCharacter
@@ -62,7 +63,8 @@ fun CharacterDetailScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
@@ -114,6 +116,15 @@ fun CharacterDetailScreen(
                         value = strength,
                         onValueChange = viewModel::onStrengthChange,
                         label = { Text("Força") },
+                        modifier = Modifier.weight(1f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true,
+                        enabled = !isLoading
+                    )
+                    OutlinedTextField(
+                        value = agility,
+                        onValueChange = viewModel::onAgilityChange,
+                        label = { Text("Agilidade") },
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
