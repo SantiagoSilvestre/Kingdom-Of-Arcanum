@@ -3,9 +3,7 @@ package br.com.silvestresantiago732.kingdomofarcanum.di
 import android.content.Context
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.data.repository.AuthRepositoryImpl
-import br.com.silvestresantiago732.kingdomofarcanum.data.repository.BakingRepositoryImpl
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.AuthRepository
-import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.BakingRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -28,10 +26,6 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindBakingRepository(bakingRepositoryImpl: BakingRepositoryImpl): BakingRepository
 
     @Binds
     @Singleton
