@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Kingdom Of Arcanum</string>
+    <string name="action_go">Ir</string>
+
+    <!-- Login Screen -->
+    <string name="login_email_label">E-mail</string>
+    <string name="login_password_label">Senha</string>
+    <string name="login_button">Entrar</string>
+    <string name="login_or_divider">ou</string>
+    <string name="login_google_button">Entrar com Google</string>
+    <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
+    <string name="login_error_msg">Erro ao entrar: %s</string>
+    <string name="login_google_failed">Falha no login com Google: %s</string>
+    <string name="login_google_no_id_token">Falha no login com Google: Sem token de ID</string>
+
+    <!-- Register Screen -->
+    <string name="register_title">Criar Conta</string>
+    <string name="register_confirm_password_label">Confirmar Senha</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="register_login_link">Já tem uma conta? Faça login</string>
+    <string name="register_password_hide">Ocultar</string>
+    <string name="register_password_show">Mostrar</string>
+    <string name="register_error_passwords_mismatch">As senhas não coincidem</string>
+    <string name="register_req_min_length">Mínimo 8 caracteres</string>
+    <string name="register_req_uppercase">Pelo menos uma letra maiúscula</string>
+    <string name="register_req_number">Pelo menos um número</string>
+    <string name="register_success">Conta criada com sucesso!</string>
+    <string name="register_error_msg">Erro ao cadastrar: %s</string>
+
+    <!-- Splash Screen -->
+    <string name="splash_part1">Kingdom Of</string>
+    <string name="splash_part2">Arcanum</string>
+    <string name="splash_subtitle">Magia e Tecnologia</string>
+
+    <!-- Settings & AppBar -->
+    <string name="logout_button">Sair</string>
+
+    <!-- Character Sheet Screen -->
+    <string name="char_sheet_delete_skill_title">Excluir Habilidade</string>
+    <string name="char_sheet_delete_skill_confirm">Tem certeza que deseja excluir a habilidade %s?</string>
+    <string name="char_sheet_delete_item_title">Excluir Item</string>
+    <string name="char_sheet_delete_item_confirm">Tem certeza que deseja excluir o item %s?</string>
+    <string name="char_sheet_attr_points_available">Você tem %d ponto(s) de atributo disponível(is)!</string>
+    <string name="char_sheet_attributes">Atributos</string>
+    <string name="char_sheet_attr_int_short">Int</string>
+    <string name="char_sheet_attr_str_short">For</string>
+    <string name="char_sheet_attr_agi_short">Agi</string>
+    <string name="char_sheet_gold">Ouro</string>
+    <string name="char_sheet_skills_tab">Habilidades</string>
+    <string name="char_sheet_items_tab">Itens</string>
+    <string name="char_sheet_manage_gold">Gerenciar Ouro</string>
+    <string name="char_sheet_current_gold">Ouro atual: %d</string>
+    <string name="char_sheet_amount">Quantidade</string>
+    <string name="char_sheet_add">Adicionar</string>
+    <string name="char_sheet_remove">Remover</string>
+    <string name="char_sheet_cancel">Cancelar</string>
+    <string name="char_sheet_distribute_points">Distribuir Pontos</string>
+    <string name="char_sheet_points_available">Pontos disponíveis: %d</string>
+    <string name="char_sheet_intelligence">Inteligência</string>
+    <string name="char_sheet_strength">Força</string>
+    <string name="char_sheet_agility">Agilidade</string>
+    <string name="char_sheet_decrease">Diminuir</string>
+    <string name="char_sheet_increase">Aumentar</string>
+    <string name="char_sheet_save">Salvar</string>
+    <string name="char_sheet_name">Nome</string>
+    <string name="char_sheet_mana_cost">Custo de Mana</string>
+    <string name="char_sheet_damage_effect">Dano/Efeito</string>
+    <string name="char_sheet_observation">Observação</string>
+    <string name="char_sheet_scroll_more">Role para ver mais</string>
+    <string name="char_sheet_add_skill">Adicionar Habilidade</string>
+    <string name="char_sheet_add_item">Adicionar Item</string>
+    <string name="char_sheet_delete">Excluir</string>
+    <string name="char_sheet_back">Voltar</string>
+    <string name="char_sheet_menu">Menu</string>
+    <string name="char_sheet_actions">Ações do Personagem</string>
+    <string name="char_sheet_edit_char">Editar Personagem</string>
+    <string name="char_sheet_generate_image">Gerar imagem do personagem</string>
+    <string name="char_sheet_loading">Carregando…</string>
+    <string name="char_sheet_level">Nível</string>
+    <string name="char_sheet_hp">Vida</string>
+    <string name="char_sheet_mana">Mana</string>
+    <string name="char_sheet_xp">XP</string>
+    <string name="char_sheet_edit_skill_title">Editar Habilidade</string>
+    <string name="char_sheet_new_skill_title">Nova Habilidade</string>
+    <string name="char_sheet_edit_item_title">Editar Item</string>
+    <string name="char_sheet_new_item_title">Novo Item</string>
+    <string name="char_sheet_use_skill">Usar Habilidade</string>
+
+    <!-- Character List Screen -->
+    <string name="char_list_delete_title">Excluir Personagem</string>
+    <string name="char_list_delete_confirm">Tem certeza que deseja excluir o personagem %s? Esta ação não pode ser desfeita.</string>
+    <string name="char_list_new_char">Novo personagem</string>
+    <string name="char_list_delete_content_desc">Apagar personagem</string>
+
+    <!-- Character Detail Screen -->
+    <string name="char_detail_new_char">Novo Personagem</string>
+    <string name="char_detail_back_desc">Voltar</string>
+    <string name="char_detail_save_desc">Salvar</string>
+    <string name="char_detail_name_label">Nome do Personagem</string>
+    <string name="char_detail_race_label">Raça</string>
+    <string name="char_detail_class_label">Classe</string>
+    <string name="char_detail_int_label">Inteligência</string>
+    <string name="char_detail_str_label">Força</string>
+    <string name="char_detail_agi_label">Agilidade</string>
+    <string name="char_detail_obs_label">Observação</string>
+    <string name="char_detail_lore_label">História (Lore)</string>
+
+    <!-- Character Image Screen -->
+    <string name="char_image_title">Gerar Imagem</string>
+    <string name="char_image_back_desc">Voltar</string>
+    <string name="char_image_instruction">Descreva como você imagina seu personagem para a IA gerar uma imagem personalizada.</string>
+    <string name="char_image_prompt_label">Descrição visual (ex: Armadura dourada, capa vermelha)</string>
+    <string name="char_image_generate_button">Gerar Imagem</string>
+    <string name="char_image_generated_desc">Imagem Gerada</string>
+    <string name="char_image_error_loading">Não foi possível carregar a imagem. Verifique sua conexão ou tente usar palavras diferentes.</string>
+    <string name="char_image_save_button">Vincular ao Personagem</string>
+    <string name="char_image_see_sheet_button">Ver na Ficha</string>
+</resources>

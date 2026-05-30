@@ -13,9 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import coil.compose.AsyncImage
 
@@ -30,8 +32,8 @@ fun CharacterListScreen(
 
     if (characterToDelete != null) {
         DeleteConfirmationDialog(
-            title = "Excluir Personagem",
-            text = "Tem certeza que deseja excluir o personagem ${characterToDelete?.name}? Esta ação não pode ser desfeita.",
+            title = stringResource(R.string.char_list_delete_title),
+            text = stringResource(R.string.char_list_delete_confirm, characterToDelete?.name ?: ""),
             onDismiss = { characterToDelete = null },
             onConfirm = {
                 characterToDelete?.let { viewModel.deleteCharacter(it.id) }
@@ -43,7 +45,7 @@ fun CharacterListScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = onNavigateToAdd) {
-                Icon(Icons.Default.Add, contentDescription = "Novo personagem")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.char_list_new_char))
             }
         }
     ) { padding ->
@@ -81,12 +83,12 @@ fun DeleteConfirmationDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Excluir")
+                Text(stringResource(R.string.char_sheet_delete))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(stringResource(R.string.char_sheet_cancel))
             }
         }
     )
@@ -128,7 +130,7 @@ fun CharacterItem(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${character.race} ${character.characterClass} - Nível ${character.level}",
+                    text = "${character.race} ${character.characterClass} - ${stringResource(R.string.char_sheet_level)} ${character.level}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.secondary
                 )
@@ -138,7 +140,7 @@ fun CharacterItem(
                 )
             }
             IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Apagar personagem")
+                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_list_delete_content_desc))
             }
         }
     }

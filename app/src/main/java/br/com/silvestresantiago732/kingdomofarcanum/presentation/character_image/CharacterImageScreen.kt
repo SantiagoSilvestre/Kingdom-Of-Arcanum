@@ -1,7 +1,6 @@
 package br.com.silvestresantiago732.kingdomofarcanum.presentation.character_image
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,9 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_image.UiState
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import coil.compose.SubcomposeAsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,10 +33,10 @@ fun CharacterImageScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Gerar Imagem") },
+                title = { Text(stringResource(R.string.char_image_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.char_image_back_desc))
                     }
                 }
             )
@@ -53,14 +53,14 @@ fun CharacterImageScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
-                text = "Descreva como você imagina seu personagem para a IA gerar uma imagem personalizada.",
+                text = stringResource(R.string.char_image_instruction),
                 style = MaterialTheme.typography.bodyMedium
             )
 
             OutlinedTextField(
                 value = prompt,
                 onValueChange = { prompt = it },
-                label = { Text("Descrição visual (ex: Armadura dourada, capa vermelha)") },
+                label = { Text(stringResource(R.string.char_image_prompt_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3
             )
@@ -73,7 +73,7 @@ fun CharacterImageScreen(
                 if (uiState is UiState.Loading) {
                     CustomCircularProgressIndicator(size = 20.dp, color = MaterialTheme.colorScheme.onPrimary)
                 } else {
-                    Text("Gerar Imagem")
+                    Text(stringResource(R.string.char_image_generate_button))
                 }
             }
 
@@ -91,7 +91,7 @@ fun CharacterImageScreen(
                 ) {
                     SubcomposeAsyncImage(
                         model = url,
-                        contentDescription = "Imagem Gerada",
+                        contentDescription = stringResource(R.string.char_image_generated_desc),
                         loading = {
                             Box(
                                 modifier = Modifier.fillMaxSize(),
@@ -116,7 +116,7 @@ fun CharacterImageScreen(
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = "Não foi possível carregar a imagem. Verifique sua conexão ou tente usar palavras diferentes (alguns termos podem ser filtrados pela IA).",
+                                    text = stringResource(R.string.char_image_error_loading),
                                     color = MaterialTheme.colorScheme.error,
                                     style = MaterialTheme.typography.bodySmall,
                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center
@@ -133,7 +133,7 @@ fun CharacterImageScreen(
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                 ) {
-                    Text("Vincular ao Personagem")
+                    Text(stringResource(R.string.char_image_save_button))
                 }
             }
 
@@ -145,7 +145,7 @@ fun CharacterImageScreen(
                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                     )
                     Button(onClick = onBack) {
-                        Text("Ver na Ficha")
+                        Text(stringResource(R.string.char_image_see_sheet_button))
                     }
                 }
                 is UiState.Error -> {

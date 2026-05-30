@@ -1,40 +1,118 @@
 <resources>
     <string name="app_name">Kingdom Of Arcanum</string>
     <string name="action_go">Go</string>
-    <string name="baking_title">Baking with Gemini</string>
-    <string name="label_prompt">Prompt</string>
-    <string name="prompt_placeholder">Provide a recipe for the baked goods in the image</string>
-    <string name="image1_description">Cupcake</string>
-    <string name="image2_description">Cookies</string>
-    <string name="image3_description">Cake</string>
-    <string name="results_placeholder">(Results will appear here)</string>
-
     <!-- Login Screen -->
-    <string name="login_email_label">E-mail</string>
-    <string name="login_password_label">Senha</string>
-    <string name="login_button">Entrar</string>
-    <string name="login_or_divider">ou</string>
-    <string name="login_google_button">Entrar com Google</string>
-    <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_or_divider">or</string>
+    <string name="login_google_button">Sign in with Google</string>
+    <string name="login_register_link">Don\'t have an account? Sign up</string>
+    <string name="login_error_msg">Error logging in: %s</string>
+    <string name="login_google_failed">Google Sign-In failed: %s</string>
+    <string name="login_google_no_id_token">Google Sign-In failed: No ID Token</string>
     <string name="default_web_client_id" translatable="false">561921512655-02afq638tkqrunfa4j5shfdb8fans5r7.apps.googleusercontent.com</string>
 
     <!-- Register Screen -->
-    <string name="register_title">Criar Conta</string>
-    <string name="register_confirm_password_label">Confirmar Senha</string>
-    <string name="register_button">Cadastrar</string>
-    <string name="register_login_link">Já tem uma conta? Faça login</string>
-    <string name="register_password_hide">Ocultar</string>
-    <string name="register_password_show">Mostrar</string>
-    <string name="register_error_passwords_mismatch">As senhas não coincidem</string>
-    <string name="register_req_min_length">Mínimo 8 caracteres</string>
-    <string name="register_req_uppercase">Pelo menos uma letra maiúscula</string>
-    <string name="register_req_number">Pelo menos um número</string>
+    <string name="register_title">Create Account</string>
+    <string name="register_confirm_password_label">Confirm Password</string>
+    <string name="register_button">Register</string>
+    <string name="register_login_link">Already have an account? Login</string>
+    <string name="register_password_hide">Hide</string>
+    <string name="register_password_show">Show</string>
+    <string name="register_error_passwords_mismatch">Passwords don\'t match</string>
+    <string name="register_req_min_length">Minimum 8 characters</string>
+    <string name="register_req_uppercase">At least one uppercase letter</string>
+    <string name="register_req_number">At least one number</string>
+    <string name="register_success">Account created successfully!</string>
+    <string name="register_error_msg">Error registering: %s</string>
 
     <!-- Splash Screen -->
     <string name="splash_part1">Kingdom Of</string>
     <string name="splash_part2">Arcanum</string>
-    <string name="splash_subtitle">Magia e Tecnologia</string>
+    <string name="splash_subtitle">Magic and Technology</string>
 
     <!-- Settings & AppBar -->
-    <string name="logout_button">Sair</string>
+    <string name="logout_button">Logout</string>
+
+    <!-- Character Sheet Screen -->
+    <string name="char_sheet_delete_skill_title">Delete Skill</string>
+    <string name="char_sheet_delete_skill_confirm">Are you sure you want to delete the skill %s?</string>
+    <string name="char_sheet_delete_item_title">Delete Item</string>
+    <string name="char_sheet_delete_item_confirm">Are you sure you want to delete the item %s?</string>
+    <string name="char_sheet_attr_points_available">You have %d attribute point(s) available!</string>
+    <string name="char_sheet_attributes">Attributes</string>
+    <string name="char_sheet_attr_int_short">Int</string>
+    <string name="char_sheet_attr_str_short">Str</string>
+    <string name="char_sheet_attr_agi_short">Agi</string>
+    <string name="char_sheet_gold">Gold</string>
+    <string name="char_sheet_skills_tab">Skills</string>
+    <string name="char_sheet_items_tab">Items</string>
+    <string name="char_sheet_manage_gold">Manage Gold</string>
+    <string name="char_sheet_current_gold">Current Gold: %d</string>
+    <string name="char_sheet_amount">Amount</string>
+    <string name="char_sheet_add">Add</string>
+    <string name="char_sheet_remove">Remove</string>
+    <string name="char_sheet_cancel">Cancel</string>
+    <string name="char_sheet_distribute_points">Distribute Points</string>
+    <string name="char_sheet_points_available">Points available: %d</string>
+    <string name="char_sheet_intelligence">Intelligence</string>
+    <string name="char_sheet_strength">Strength</string>
+    <string name="char_sheet_agility">Agility</string>
+    <string name="char_sheet_decrease">Decrease</string>
+    <string name="char_sheet_increase">Increase</string>
+    <string name="char_sheet_save">Save</string>
+    <string name="char_sheet_name">Name</string>
+    <string name="char_sheet_mana_cost">Mana Cost</string>
+    <string name="char_sheet_damage_effect">Damage/Effect</string>
+    <string name="char_sheet_observation">Observation</string>
+    <string name="char_sheet_scroll_more">Scroll for more</string>
+    <string name="char_sheet_add_skill">Add Skill</string>
+    <string name="char_sheet_add_item">Add Item</string>
+    <string name="char_sheet_delete">Delete</string>
+    <string name="char_sheet_back">Back</string>
+    <string name="char_sheet_menu">Menu</string>
+    <string name="char_sheet_actions">Character Actions</string>
+    <string name="char_sheet_edit_char">Edit Character</string>
+    <string name="char_sheet_generate_image">Generate character image</string>
+    <string name="char_sheet_loading">Loading...</string>
+    <string name="char_sheet_level">Level</string>
+    <string name="char_sheet_hp">HP</string>
+    <string name="char_sheet_mana">Mana</string>
+    <string name="char_sheet_xp">XP</string>
+    <string name="char_sheet_edit_skill_title">Edit Skill</string>
+    <string name="char_sheet_new_skill_title">New Skill</string>
+    <string name="char_sheet_edit_item_title">Edit Item</string>
+    <string name="char_sheet_new_item_title">New Item</string>
+    <string name="char_sheet_use_skill">Use Skill</string>
+
+    <!-- Character List Screen -->
+    <string name="char_list_delete_title">Delete Character</string>
+    <string name="char_list_delete_confirm">Are you sure you want to delete the character %s? This action cannot be undone.</string>
+    <string name="char_list_new_char">New character</string>
+    <string name="char_list_delete_content_desc">Delete character</string>
+
+    <!-- Character Detail Screen -->
+    <string name="char_detail_new_char">New Character</string>
+    <string name="char_detail_back_desc">Back</string>
+    <string name="char_detail_save_desc">Save</string>
+    <string name="char_detail_name_label">Character Name</string>
+    <string name="char_detail_race_label">Race</string>
+    <string name="char_detail_class_label">Class</string>
+    <string name="char_detail_int_label">Intelligence</string>
+    <string name="char_detail_str_label">Strength</string>
+    <string name="char_detail_agi_label">Agility</string>
+    <string name="char_detail_obs_label">Observation</string>
+    <string name="char_detail_lore_label">Lore</string>
+
+    <!-- Character Image Screen -->
+    <string name="char_image_title">Generate Image</string>
+    <string name="char_image_back_desc">Back</string>
+    <string name="char_image_instruction">Describe how you imagine your character for the AI to generate a custom image.</string>
+    <string name="char_image_prompt_label">Visual description (e.g. Golden armor, red cape)</string>
+    <string name="char_image_generate_button">Generate Image</string>
+    <string name="char_image_generated_desc">Generated Image</string>
+    <string name="char_image_error_loading">Could not load image. Check your connection or try using different words.</string>
+    <string name="char_image_save_button">Link to Character</string>
+    <string name="char_image_see_sheet_button">See on Sheet</string>
 </resources>

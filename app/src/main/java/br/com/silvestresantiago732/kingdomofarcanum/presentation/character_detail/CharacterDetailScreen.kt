@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.silvestresantiago732.kingdomofarcanum.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,15 +46,15 @@ fun CharacterDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (name.isEmpty()) "Novo Personagem" else name) },
+                title = { Text(if (name.isEmpty()) stringResource(R.string.char_detail_new_char) else name) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.char_detail_back_desc))
                     }
                 },
                 actions = {
                     IconButton(onClick = viewModel::saveCharacter, enabled = !isLoading && name.isNotBlank()) {
-                        Icon(Icons.Default.Save, contentDescription = "Salvar")
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.char_detail_save_desc))
                     }
                 }
             )
@@ -70,7 +72,7 @@ fun CharacterDetailScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = viewModel::onNameChange,
-                label = { Text("Nome do Personagem") },
+                label = { Text(stringResource(R.string.char_detail_name_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 enabled = !isLoading
@@ -83,7 +85,7 @@ fun CharacterDetailScreen(
                 OutlinedTextField(
                     value = race,
                     onValueChange = viewModel::onRaceChange,
-                    label = { Text("Raça") },
+                    label = { Text(stringResource(R.string.char_detail_race_label)) },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     enabled = !isLoading
@@ -91,7 +93,7 @@ fun CharacterDetailScreen(
                 OutlinedTextField(
                     value = characterClass,
                     onValueChange = viewModel::onCharacterClassChange,
-                    label = { Text("Classe") },
+                    label = { Text(stringResource(R.string.char_detail_class_label)) },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     enabled = !isLoading
@@ -106,7 +108,7 @@ fun CharacterDetailScreen(
                     OutlinedTextField(
                         value = intelligence,
                         onValueChange = viewModel::onIntelligenceChange,
-                        label = { Text("Inteligência") },
+                        label = { Text(stringResource(R.string.char_detail_int_label)) },
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
@@ -115,7 +117,7 @@ fun CharacterDetailScreen(
                     OutlinedTextField(
                         value = strength,
                         onValueChange = viewModel::onStrengthChange,
-                        label = { Text("Força") },
+                        label = { Text(stringResource(R.string.char_detail_str_label)) },
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
@@ -124,7 +126,7 @@ fun CharacterDetailScreen(
                     OutlinedTextField(
                         value = agility,
                         onValueChange = viewModel::onAgilityChange,
-                        label = { Text("Agilidade") },
+                        label = { Text(stringResource(R.string.char_detail_agi_label)) },
                         modifier = Modifier.weight(1f),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         singleLine = true,
@@ -136,7 +138,7 @@ fun CharacterDetailScreen(
             OutlinedTextField(
                 value = observation,
                 onValueChange = viewModel::onObservationChange,
-                label = { Text("Observação") },
+                label = { Text(stringResource(R.string.char_detail_obs_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
                 enabled = !isLoading
@@ -145,7 +147,7 @@ fun CharacterDetailScreen(
             OutlinedTextField(
                 value = lore,
                 onValueChange = viewModel::onLoreChange,
-                label = { Text("História (Lore)") },
+                label = { Text(stringResource(R.string.char_detail_lore_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 5,
                 enabled = !isLoading

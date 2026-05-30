@@ -29,10 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Item
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Skill
 import coil.compose.AsyncImage
@@ -50,7 +52,6 @@ fun CharacterSheetScreen(
     val isLoading by viewModel.isLoading
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val scrollState = rememberScrollState()
     
     var showSkillDialog by remember { mutableStateOf(false) }
     var showItemDialog by remember { mutableStateOf(false) }
@@ -75,8 +76,8 @@ fun CharacterSheetScreen(
 
     if (skillToDelete != null) {
         DeleteConfirmationDialog(
-            title = "Excluir Habilidade",
-            text = "Tem certeza que deseja excluir a habilidade ${skillToDelete?.name}?",
+            title = stringResource(R.string.char_sheet_delete_skill_title),
+            text = stringResource(R.string.char_sheet_delete_skill_confirm, skillToDelete?.name ?: ""),
             onDismiss = { skillToDelete = null },
             onConfirm = {
                 skillToDelete?.let { viewModel.deleteSkill(it.id) }
@@ -87,8 +88,8 @@ fun CharacterSheetScreen(
 
     if (itemToDelete != null) {
         DeleteConfirmationDialog(
-            title = "Excluir Item",
-            text = "Tem certeza que deseja excluir o item ${itemToDelete?.name}?",
+            title = stringResource(R.string.char_sheet_delete_item_title),
+            text = stringResource(R.string.char_sheet_delete_item_confirm, itemToDelete?.name ?: ""),
             onDismiss = { itemToDelete = null },
             onConfirm = {
                 itemToDelete?.let { viewModel.deleteItem(it.id) }
@@ -128,7 +129,7 @@ fun CharacterSheetScreen(
 
     if (showSkillDialog || skillToEdit != null) {
         EntryDialog(
-            title = if (skillToEdit != null) "Editar Habilidade" else "Nova Habilidade",
+            title = if (skillToEdit != null) stringResource(R.string.char_sheet_edit_skill_title) else stringResource(R.string.char_sheet_new_skill_title),
             initialName = skillToEdit?.name ?: "",
             initialDamage = skillToEdit?.damage ?: "",
             initialObservation = skillToEdit?.observation ?: "",
@@ -152,7 +153,7 @@ fun CharacterSheetScreen(
 
     if (showItemDialog || itemToEdit != null) {
         EntryDialog(
-            title = if (itemToEdit != null) "Editar Item" else "Novo Item",
+            title = if (itemToEdit != null) stringResource(R.string.char_sheet_edit_item_title) else stringResource(R.string.char_sheet_new_item_title),
             initialName = itemToEdit?.name ?: "",
             initialDamage = itemToEdit?.damage ?: "",
             initialObservation = itemToEdit?.observation ?: "",
@@ -178,13 +179,13 @@ fun CharacterSheetScreen(
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    "Ações do Personagem",
+                    stringResource(R.string.char_sheet_actions),
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.titleMedium
                 )
                 HorizontalDivider()
                 NavigationDrawerItem(
-                    label = { Text("Editar Personagem") },
+                    label = { Text(stringResource(R.string.char_sheet_edit_char)) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -194,7 +195,7 @@ fun CharacterSheetScreen(
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
                 NavigationDrawerItem(
-                    label = { Text("Gerar imagem do personagem") },
+                    label = { Text(stringResource(R.string.char_sheet_generate_image)) },
                     selected = false,
                     onClick = {
                         scope.launch { drawerState.close() }
@@ -223,9 +224,9 @@ fun CharacterSheetScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
                             Column {
-                                Text(character?.name ?: "Carregando...")
+                                Text(character?.name ?: stringResource(R.string.char_sheet_loading))
                                 Text(
-                                    text = "${character?.race ?: ""} ${character?.characterClass ?: ""} - Nível ${character?.level ?: 1}",
+                                    text = "${character?.race ?: ""} ${character?.characterClass ?: ""} - ${stringResource(R.string.char_sheet_level)} ${character?.level ?: 1}",
                                     style = MaterialTheme.typography.labelSmall
                                 )
                             }
@@ -233,12 +234,12 @@ fun CharacterSheetScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.char_sheet_back))
                         }
                     },
                     actions = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
+                            Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.char_sheet_menu))
                         }
                     }
                 )
@@ -260,7 +261,7 @@ fun CharacterSheetScreen(
                     ) {
                         // Barra de Vida
                         StatBar(
-                            label = "Vida",
+                            label = stringResource(R.string.char_sheet_hp),
                             current = char.currentHp,
                             max = char.maxHp,
                             color = Color(0xFFE57373),
@@ -270,7 +271,7 @@ fun CharacterSheetScreen(
 
                         // Barra de Mana
                         StatBar(
-                            label = "Mana",
+                            label = stringResource(R.string.char_sheet_mana),
                             current = char.currentMana,
                             max = char.maxMana,
                             color = Color(0xFF64B5F6),
@@ -280,7 +281,7 @@ fun CharacterSheetScreen(
 
                         // Barra de XP
                         StatBar(
-                            label = "XP",
+                            label = stringResource(R.string.char_sheet_xp),
                             current = char.currentXp,
                             max = char.maxXp,
                             color = Color(0xFFFFD54F),
@@ -289,7 +290,7 @@ fun CharacterSheetScreen(
 
                         if (char.attributePoints > 0) {
                             Text(
-                                text = "Você tem ${char.attributePoints} ponto(s) de atributo disponível(is)!",
+                                text = stringResource(R.string.char_sheet_attr_points_available, char.attributePoints),
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.bodySmall,
                                 fontWeight = FontWeight.Bold,
@@ -301,7 +302,7 @@ fun CharacterSheetScreen(
 
                         // Seção de Atributos
                         Text(
-                            text = "Atributos",
+                            text = stringResource(R.string.char_sheet_attributes),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -310,21 +311,21 @@ fun CharacterSheetScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             EditableAttribute(
-                                label = "Int",
+                                label = stringResource(R.string.char_sheet_attr_int_short),
                                 value = char.intelligence,
                                 onValueChange = { },
                                 modifier = Modifier.weight(1f),
                                 enabled = false
                             )
                             EditableAttribute(
-                                label = "For",
+                                label = stringResource(R.string.char_sheet_attr_str_short),
                                 value = char.strength,
                                 onValueChange = { },
                                 modifier = Modifier.weight(1f),
                                 enabled = false
                             )
                             EditableAttribute(
-                                label = "Agi",
+                                label = stringResource(R.string.char_sheet_attr_agi_short),
                                 value = char.agility,
                                 onValueChange = { },
                                 modifier = Modifier.weight(1f),
@@ -345,7 +346,7 @@ fun CharacterSheetScreen(
                             ) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(
-                                        text = "Ouro",
+                                        text = stringResource(R.string.char_sheet_gold),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -362,7 +363,7 @@ fun CharacterSheetScreen(
 
                         // Tabs para Habilidades e Itens
                         var selectedTab by remember { mutableIntStateOf(0) }
-                        val tabs = listOf("Habilidades", "Itens")
+                        val tabs = listOf(stringResource(R.string.char_sheet_skills_tab), stringResource(R.string.char_sheet_items_tab))
 
                         Column(modifier = Modifier.fillMaxWidth()) {
                             TabRow(selectedTabIndex = selectedTab) {
@@ -410,7 +411,7 @@ fun GoldControlDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Gerenciar Ouro") },
+        title = { Text(stringResource(R.string.char_sheet_manage_gold)) },
         text = {
             Column(
                 modifier = Modifier
@@ -418,11 +419,11 @@ fun GoldControlDialog(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("Ouro atual: $currentGold", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.char_sheet_current_gold, currentGold), style = MaterialTheme.typography.bodyLarge)
                 OutlinedTextField(
                     value = amountText,
                     onValueChange = { amountText = it },
-                    label = { Text("Quantidade") },
+                    label = { Text(stringResource(R.string.char_sheet_amount)) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -436,7 +437,7 @@ fun GoldControlDialog(
                         modifier = Modifier.weight(1f),
                         enabled = amount > 0
                     ) {
-                        Text("Adicionar")
+                        Text(stringResource(R.string.char_sheet_add))
                     }
                     Button(
                         onClick = { onConfirm((currentGold - amount).coerceAtLeast(0)) },
@@ -444,14 +445,14 @@ fun GoldControlDialog(
                         enabled = amount > 0 && currentGold >= amount,
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                     ) {
-                        Text("Remover")
+                        Text(stringResource(R.string.char_sheet_remove))
                     }
                 }
             }
         },
         confirmButton = {},
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.char_sheet_cancel)) }
         }
     )
 }
@@ -469,7 +470,7 @@ fun AttributePointsDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Distribuir Pontos") },
+        title = { Text(stringResource(R.string.char_sheet_distribute_points)) },
         text = {
             Column(
                 modifier = Modifier
@@ -477,10 +478,10 @@ fun AttributePointsDialog(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("Pontos disponíveis: $pointsLeft", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.char_sheet_points_available, pointsLeft), fontWeight = FontWeight.Bold)
                 
                 AttributeControl(
-                    label = "Inteligência",
+                    label = stringResource(R.string.char_sheet_intelligence),
                     currentValue = character.intelligence + intIncrease,
                     canIncrease = pointsLeft > 0,
                     onIncrease = { intIncrease++ },
@@ -489,7 +490,7 @@ fun AttributePointsDialog(
                 )
 
                 AttributeControl(
-                    label = "Força",
+                    label = stringResource(R.string.char_sheet_strength),
                     currentValue = character.strength + strIncrease,
                     canIncrease = pointsLeft > 0,
                     onIncrease = { strIncrease++ },
@@ -498,7 +499,7 @@ fun AttributePointsDialog(
                 )
 
                 AttributeControl(
-                    label = "Agilidade",
+                    label = stringResource(R.string.char_sheet_agility),
                     currentValue = character.agility + agiIncrease,
                     canIncrease = pointsLeft > 0,
                     onIncrease = { agiIncrease++ },
@@ -512,11 +513,11 @@ fun AttributePointsDialog(
                 onClick = { onConfirm(intIncrease, strIncrease, agiIncrease) },
                 enabled = (intIncrease + strIncrease + agiIncrease) > 0
             ) {
-                Text("Salvar")
+                Text(stringResource(R.string.char_sheet_save))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.char_sheet_cancel)) }
         }
     )
 }
@@ -540,12 +541,12 @@ fun AttributeControl(
             IconButton(onClick = onDecrease, enabled = canDecrease) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Diminuir",
+                    contentDescription = stringResource(R.string.char_sheet_decrease),
                     modifier = Modifier.size(18.dp)
                 )
             }
             IconButton(onClick = onIncrease, enabled = canIncrease) {
-                Icon(Icons.Default.Add, contentDescription = "Aumentar")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.char_sheet_increase))
             }
         }
     }
@@ -595,7 +596,7 @@ fun SkillListTab(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        "Role para ver mais",
+                        stringResource(R.string.char_sheet_scroll_more),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -607,7 +608,7 @@ fun SkillListTab(
             Button(onClick = onAddSkill) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(Modifier.width(4.dp))
-                Text("Adicionar Habilidade")
+                Text(stringResource(R.string.char_sheet_add_skill))
             }
         }
         
@@ -632,7 +633,7 @@ fun SkillListTab(
                         modifier = Modifier.clickable { onEditSkill(skill) },
                         headlineContent = { Text(skill.name, fontWeight = FontWeight.Bold) },
                         supportingContent = { 
-                            Text("${skill.damage} - ${skill.observation}\nCusto de Mana: ${skill.manaCost}") 
+                            Text("${skill.damage} - ${skill.observation}\n${stringResource(R.string.char_sheet_mana_cost)}: ${skill.manaCost}") 
                         },
                         trailingContent = {
                             Row {
@@ -642,12 +643,12 @@ fun SkillListTab(
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.PlayArrow, 
-                                        contentDescription = "Usar Habilidade",
+                                        contentDescription = stringResource(R.string.char_sheet_use_skill),
                                         tint = if (canUse) Color(0xFF4CAF50) else Color.Gray
                                     )
                                 }
                                 IconButton(onClick = { onDeleteSkill(skill) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
                                 }
                             }
                         }
@@ -712,7 +713,7 @@ fun ItemListTab(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        "Role para ver mais",
+                        stringResource(R.string.char_sheet_scroll_more),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -724,7 +725,7 @@ fun ItemListTab(
             Button(onClick = onAddItem) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(Modifier.width(4.dp))
-                Text("Adicionar Item")
+                Text(stringResource(R.string.char_sheet_add_item))
             }
         }
         
@@ -750,7 +751,7 @@ fun ItemListTab(
                         supportingContent = { Text("${item.damage} - ${item.observation}") },
                         trailingContent = {
                             IconButton(onClick = { onDeleteItem(item) }) {
-                                Icon(Icons.Default.Delete, contentDescription = "Excluir", tint = Color.Red)
+                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
                             }
                         }
                     )
@@ -806,12 +807,12 @@ fun DeleteConfirmationDialog(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Excluir")
+                Text(stringResource(R.string.char_sheet_delete))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancelar")
+                Text(stringResource(R.string.char_sheet_cancel))
             }
         }
     )
@@ -843,17 +844,17 @@ fun EntryDialog(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nome") })
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text(stringResource(R.string.char_sheet_name)) })
                 if (isSkill) {
                     OutlinedTextField(
                         value = manaCost, 
                         onValueChange = { manaCost = it }, 
-                        label = { Text("Custo de Mana") },
+                        label = { Text(stringResource(R.string.char_sheet_mana_cost)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
-                OutlinedTextField(value = damage, onValueChange = { damage = it }, label = { Text("Dano/Efeito") })
-                OutlinedTextField(value = observation, onValueChange = { observation = it }, label = { Text("Observação") }, minLines = 2)
+                OutlinedTextField(value = damage, onValueChange = { damage = it }, label = { Text(stringResource(R.string.char_sheet_damage_effect)) })
+                OutlinedTextField(value = observation, onValueChange = { observation = it }, label = { Text(stringResource(R.string.char_sheet_observation)) }, minLines = 2)
             }
         },
         confirmButton = {
@@ -861,11 +862,11 @@ fun EntryDialog(
                 onClick = { onConfirm(name, damage, observation, manaCost.toIntOrNull() ?: 0) }, 
                 enabled = name.isNotBlank()
             ) {
-                Text("Salvar")
+                Text(stringResource(R.string.char_sheet_save))
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancelar") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.char_sheet_cancel)) }
         }
     )
 }
@@ -892,7 +893,7 @@ fun StatBar(
                     IconButton(onClick = onRemoveClick, modifier = Modifier.size(32.dp)) {
                         Icon(
                             imageVector = Icons.Default.Remove,
-                            contentDescription = "Diminuir",
+                            contentDescription = stringResource(R.string.char_sheet_decrease),
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -902,7 +903,7 @@ fun StatBar(
                     IconButton(onClick = onAddClick, modifier = Modifier.size(32.dp)) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Aumentar",
+                            contentDescription = stringResource(R.string.char_sheet_increase),
                             modifier = Modifier.size(16.dp)
                         )
                     }

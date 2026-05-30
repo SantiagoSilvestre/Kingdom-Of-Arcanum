@@ -45,12 +45,12 @@ fun RegisterScreen(
     LaunchedEffect(registerResult) {
         registerResult?.let { result ->
             if (result.isSuccess) {
-                Toast.makeText(context, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.register_success), Toast.LENGTH_SHORT).show()
                 onRegisterSuccess()
             } else {
                 Toast.makeText(
                     context,
-                    "Erro ao cadastrar: ${result.exceptionOrNull()?.message}",
+                    context.getString(R.string.register_error_msg, result.exceptionOrNull()?.message),
                     Toast.LENGTH_LONG
                 ).show()
                 viewModel.resetResult()

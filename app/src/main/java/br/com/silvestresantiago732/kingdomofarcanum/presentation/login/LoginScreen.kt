@@ -43,10 +43,10 @@ fun LoginScreen(
             account?.idToken?.let { idToken ->
                 viewModel.signInWithGoogle(idToken)
             } ?: run {
-                Toast.makeText(context, "Google Sign-In failed: No ID Token", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.login_google_no_id_token), Toast.LENGTH_SHORT).show()
             }
         } catch (e: ApiException) {
-            Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.login_google_failed, e.message), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -66,7 +66,7 @@ fun LoginScreen(
             } else {
                 Toast.makeText(
                     context,
-                    "Erro ao entrar: ${result.exceptionOrNull()?.message}",
+                    context.getString(R.string.login_error_msg, result.exceptionOrNull()?.message),
                     Toast.LENGTH_LONG
                 ).show()
                 viewModel.resetResult()
