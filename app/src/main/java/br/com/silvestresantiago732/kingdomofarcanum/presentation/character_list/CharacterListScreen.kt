@@ -58,19 +58,34 @@ fun CharacterListScreen(
             }
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(characters) { character ->
-                CharacterItem(
-                    character = character,
-                    onDelete = { characterToDelete = character },
-                    onClick = { onNavigateToDetail(character.id) }
+        if (characters.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.empty_list_message),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(characters) { character ->
+                    CharacterItem(
+                        character = character,
+                        onDelete = { characterToDelete = character },
+                        onClick = { onNavigateToDetail(character.id) }
+                    )
+                }
             }
         }
     }

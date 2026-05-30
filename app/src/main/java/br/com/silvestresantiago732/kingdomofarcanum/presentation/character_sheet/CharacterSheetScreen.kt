@@ -596,7 +596,7 @@ fun SkillListTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (skills.size >= 1) {
+            if (skills.isNotEmpty()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.KeyboardArrowDown,
@@ -632,66 +632,79 @@ fun SkillListTab(
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(skills) { skill ->
-                    val canUse = currentMana >= skill.manaCost
-                    ListItem(
-                        modifier = Modifier.clickable { onEditSkill(skill) },
-                        headlineContent = { Text(skill.name, fontWeight = FontWeight.Bold) },
-                        supportingContent = { 
-                            Text("${skill.damage} - ${skill.observation}\n${stringResource(R.string.char_sheet_mana_cost)}: ${skill.manaCost}") 
-                        },
-                        trailingContent = {
-                            Row {
-                                IconButton(
-                                    onClick = { onUseSkill(skill) },
-                                    enabled = canUse
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.PlayArrow, 
-                                        contentDescription = stringResource(R.string.char_sheet_use_skill),
-                                        tint = if (canUse) Color(0xFF4CAF50) else Color.Gray
-                                    )
-                                }
-                                IconButton(onClick = { onDeleteSkill(skill) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
+            if (skills.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.empty_list_message),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(skills) { skill ->
+                        val canUse = currentMana >= skill.manaCost
+                        ListItem(
+                            modifier = Modifier.clickable { onEditSkill(skill) },
+                            headlineContent = { Text(skill.name, fontWeight = FontWeight.Bold) },
+                            supportingContent = { 
+                                Text("${skill.damage} - ${skill.observation}\n${stringResource(R.string.char_sheet_mana_cost)}: ${skill.manaCost}") 
+                            },
+                            trailingContent = {
+                                Row {
+                                    IconButton(
+                                        onClick = { onUseSkill(skill) },
+                                        enabled = canUse
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.PlayArrow, 
+                                            contentDescription = stringResource(R.string.char_sheet_use_skill),
+                                            tint = if (canUse) Color(0xFF4CAF50) else Color.Gray
+                                        )
+                                    }
+                                    IconButton(onClick = { onDeleteSkill(skill) }) {
+                                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
+                                    }
                                 }
                             }
-                        }
-                    )
-                    HorizontalDivider()
+                        )
+                        HorizontalDivider()
+                    }
                 }
-            }
 
-            // Barra de rolagem visual customizada
-            if (skills.size >= 1) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .fillMaxHeight()
-                        .width(4.dp)
-                        .padding(vertical = 4.dp, horizontal = 1.dp)
-                        .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
-                ) {
-                    val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
-                    val totalItems = skills.size.toFloat()
-                    val visibleItems = 3f
-                    val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
-                    val canScroll = totalItems > visibleItems
-                    val scrollThumbOffset = if (canScroll) {
-                        (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
-                    } else 0.dp
-
+                // Barra de rolagem visual customizada
+                if (skills.size >= 1) {
                     Box(
                         modifier = Modifier
-                            .offset(y = scrollThumbOffset)
-                            .height(scrollThumbHeight)
-                            .fillMaxWidth()
-                            .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
-                    )
+                            .align(Alignment.CenterEnd)
+                            .fillMaxHeight()
+                            .width(4.dp)
+                            .padding(vertical = 4.dp, horizontal = 1.dp)
+                            .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
+                    ) {
+                        val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
+                        val totalItems = skills.size.toFloat()
+                        val visibleItems = 3f
+                        val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
+                        val canScroll = totalItems > visibleItems
+                        val scrollThumbOffset = if (canScroll) {
+                            (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
+                        } else 0.dp
+
+                        Box(
+                            modifier = Modifier
+                                .offset(y = scrollThumbOffset)
+                                .height(scrollThumbHeight)
+                                .fillMaxWidth()
+                                .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
+                        )
+                    }
                 }
             }
         }
@@ -713,7 +726,7 @@ fun ItemListTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (items.size >= 1) {
+            if (items.isNotEmpty()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.Default.KeyboardArrowDown,
@@ -749,51 +762,64 @@ fun ItemListTab(
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(items) { item ->
-                    ListItem(
-                        modifier = Modifier.clickable { onEditItem(item) },
-                        headlineContent = { Text(item.name, fontWeight = FontWeight.Bold) },
-                        supportingContent = { Text("${item.damage} - ${item.observation}") },
-                        trailingContent = {
-                            IconButton(onClick = { onDeleteItem(item) }) {
-                                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
-                            }
-                        }
-                    )
-                    HorizontalDivider()
-                }
-            }
-
-            // Barra de rolagem visual customizada
-            if (items.size >= 1) {
+            if (items.isEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .fillMaxHeight()
-                        .width(4.dp)
-                        .padding(vertical = 4.dp, horizontal = 1.dp)
-                        .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
-                    val totalItems = items.size.toFloat()
-                    val visibleItems = 3f
-                    val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
-                    val canScroll = totalItems > visibleItems
-                    val scrollThumbOffset = if (canScroll) {
-                        (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
-                    } else 0.dp
+                    Text(
+                        text = stringResource(R.string.empty_list_message),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(items) { item ->
+                        ListItem(
+                            modifier = Modifier.clickable { onEditItem(item) },
+                            headlineContent = { Text(item.name, fontWeight = FontWeight.Bold) },
+                            supportingContent = { Text("${item.damage} - ${item.observation}") },
+                            trailingContent = {
+                                IconButton(onClick = { onDeleteItem(item) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_sheet_delete), tint = Color.Red)
+                                }
+                            }
+                        )
+                        HorizontalDivider()
+                    }
+                }
 
+                // Barra de rolagem visual customizada
+                if (items.size >= 1) {
                     Box(
                         modifier = Modifier
-                            .offset(y = scrollThumbOffset)
-                            .height(scrollThumbHeight)
-                            .fillMaxWidth()
-                            .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
-                    )
+                            .align(Alignment.CenterEnd)
+                            .fillMaxHeight()
+                            .width(4.dp)
+                            .padding(vertical = 4.dp, horizontal = 1.dp)
+                            .background(color = Color.LightGray.copy(alpha = 0.3f), shape = CircleShape)
+                    ) {
+                        val firstVisibleIndex = listState.firstVisibleItemIndex.toFloat()
+                        val totalItems = items.size.toFloat()
+                        val visibleItems = 3f
+                        val scrollThumbHeight = 260.dp / (totalItems / visibleItems).coerceAtLeast(1f)
+                        val canScroll = totalItems > visibleItems
+                        val scrollThumbOffset = if (canScroll) {
+                            (260.dp - scrollThumbHeight) * (firstVisibleIndex / (totalItems - visibleItems).coerceAtLeast(1f))
+                        } else 0.dp
+
+                        Box(
+                            modifier = Modifier
+                                .offset(y = scrollThumbOffset)
+                                .height(scrollThumbHeight)
+                                .fillMaxWidth()
+                                .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f), shape = CircleShape)
+                        )
+                    }
                 }
             }
         }

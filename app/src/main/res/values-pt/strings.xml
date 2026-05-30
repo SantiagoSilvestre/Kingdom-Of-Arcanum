@@ -121,4 +121,5 @@
     <string name="char_image_error_ai">Erro de conexão com a IA.</string>
     <string name="error_network">Erro de conexão. Verifique sua internet.</string>
     <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
+    <string name="empty_list_message">Nenhum registro adicionado</string>
 </resources>
