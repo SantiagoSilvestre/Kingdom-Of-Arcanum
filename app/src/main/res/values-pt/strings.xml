@@ -9,6 +9,7 @@
     <string name="login_or_divider">ou</string>
     <string name="login_google_button">Entrar com Google</string>
     <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
+    <string name="login_forgot_password">Esqueceu a senha?</string>
     <string name="login_error_msg">Erro ao entrar: e-mail ou senha incorretos</string>
     <string name="login_google_failed">Falha no login com Google</string>
     <string name="login_google_no_id_token">Falha no login com Google</string>
@@ -34,6 +35,13 @@
 
     <!-- Settings & AppBar -->
     <string name="logout_button">Sair</string>
+
+    <!-- Forgot Password Screen -->
+    <string name="forgot_password_title">Recuperar Senha</string>
+    <string name="forgot_password_instruction">Insira seu e-mail para receber um link de recuperação.</string>
+    <string name="forgot_password_button">Enviar Link de Recuperação</string>
+    <string name="forgot_password_success">E-mail de recuperação enviado! Verifique sua caixa de entrada.</string>
+    <string name="forgot_password_error">Erro ao enviar e-mail. Verifique se o e-mail está correto.</string>
 
     <!-- Character Sheet Screen -->
     <string name="char_sheet_delete_skill_title">Excluir Habilidade</string>

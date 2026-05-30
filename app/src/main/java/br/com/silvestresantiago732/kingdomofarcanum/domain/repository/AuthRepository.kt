@@ -7,5 +7,6 @@ interface AuthRepository {
     suspend fun login(email: String, pass: String): Result<FirebaseUser?>
     suspend fun signInWithGoogle(idToken: String): Result<FirebaseUser?>
     suspend fun signUp(email: String, pass: String): Result<FirebaseUser?>
+    suspend fun sendPasswordResetEmail(email: String): Result<Unit>
     fun logout()
 }

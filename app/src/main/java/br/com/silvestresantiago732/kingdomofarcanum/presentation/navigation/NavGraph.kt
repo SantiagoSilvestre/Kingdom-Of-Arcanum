@@ -8,6 +8,7 @@ import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_detai
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_image.CharacterImageScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_list.CharacterListScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.character_sheet.CharacterSheetScreen
+import br.com.silvestresantiago732.kingdomofarcanum.presentation.login.ForgotPasswordScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.login.LoginScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.register.RegisterScreen
 import br.com.silvestresantiago732.kingdomofarcanum.presentation.splash.SplashScreen
@@ -16,6 +17,7 @@ sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object Login : Screen("login")
     object Register : Screen("register")
+    object ForgotPassword : Screen("forgot_password")
     object Home : Screen("home")
     object CharacterImage : Screen("character_image/{characterId}") {
         fun createRoute(characterId: String) = "character_image/$characterId"
@@ -53,11 +55,19 @@ fun NavGraph(navController: NavHostController) {
                 onNavigateToRegister = {
                     navController.navigate(Screen.Register.route)
                 },
+                onNavigateToForgotPassword = {
+                    navController.navigate(Screen.ForgotPassword.route)
+                },
                 onLoginSuccess = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
                 }
+            )
+        }
+        composable(Screen.ForgotPassword.route) {
+            ForgotPasswordScreen(
+                onBack = { navController.popBackStack() }
             )
         }
         composable(Screen.Register.route) {

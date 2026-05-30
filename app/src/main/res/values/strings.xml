@@ -8,6 +8,7 @@
     <string name="login_or_divider">or</string>
     <string name="login_google_button">Sign in with Google</string>
     <string name="login_register_link">Don\'t have an account? Sign up</string>
+    <string name="login_forgot_password">Forgot password?</string>
     <string name="login_error_msg">Error logging in: incorrect email or password</string>
     <string name="login_google_failed">Google login failed</string>
     <string name="login_google_no_id_token">Google login failed</string>
@@ -34,6 +35,13 @@
 
     <!-- Settings & AppBar -->
     <string name="logout_button">Logout</string>
+
+    <!-- Forgot Password Screen -->
+    <string name="forgot_password_title">Recover Password</string>
+    <string name="forgot_password_instruction">Enter your email to receive a recovery link.</string>
+    <string name="forgot_password_button">Send Recovery Link</string>
+    <string name="forgot_password_success">Recovery email sent! Check your inbox.</string>
+    <string name="forgot_password_error">Error sending email. Check if the email is correct.</string>
 
     <!-- Character Sheet Screen -->
     <string name="char_sheet_delete_skill_title">Delete Skill</string>

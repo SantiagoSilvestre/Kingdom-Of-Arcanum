@@ -24,6 +24,7 @@ import com.google.android.gms.common.api.ApiException
 @Composable
 fun LoginScreen(
     onNavigateToRegister: () -> Unit = {},
+    onNavigateToForgotPassword: () -> Unit = {},
     onLoginSuccess: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel<LoginViewModel>()
 ) {
@@ -117,7 +118,18 @@ fun LoginScreen(
                 enabled = !isLoading
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            TextButton(
+                onClick = onNavigateToForgotPassword,
+                modifier = Modifier.align(Alignment.End),
+                enabled = !isLoading
+            ) {
+                Text(
+                    text = stringResource(R.string.login_forgot_password),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = viewModel::login,
