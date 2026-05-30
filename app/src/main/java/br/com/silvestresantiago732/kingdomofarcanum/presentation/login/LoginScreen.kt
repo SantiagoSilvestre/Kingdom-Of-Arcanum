@@ -31,8 +31,16 @@ fun LoginScreen(
     val password by viewModel.password
     val isLoading by viewModel.isLoading
     val loginResult by viewModel.loginResult
+    val error by viewModel.error
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, context.getString(it), Toast.LENGTH_LONG).show()
+            viewModel.resetResult()
+        }
+    }
 
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -46,7 +54,7 @@ fun LoginScreen(
                 Toast.makeText(context, context.getString(R.string.login_google_no_id_token), Toast.LENGTH_SHORT).show()
             }
         } catch (e: ApiException) {
-            Toast.makeText(context, context.getString(R.string.login_google_failed, e.message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.login_google_failed), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -63,13 +71,6 @@ fun LoginScreen(
         loginResult?.let { result ->
             if (result.isSuccess) {
                 onLoginSuccess()
-            } else {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.login_error_msg, result.exceptionOrNull()?.message),
-                    Toast.LENGTH_LONG
-                ).show()
-                viewModel.resetResult()
             }
         }
     }

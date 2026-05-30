@@ -140,7 +140,7 @@ fun CharacterImageScreen(
             when (uiState) {
                 is UiState.Success -> {
                     Text(
-                        text = (uiState as UiState.Success).outputText,
+                        text = stringResource((uiState as UiState.Success).messageRes),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                     )
@@ -150,7 +150,7 @@ fun CharacterImageScreen(
                 }
                 is UiState.Error -> {
                     Text(
-                        text = (uiState as UiState.Error).errorMessage,
+                        text = stringResource((uiState as UiState.Error).messageRes),
                         color = MaterialTheme.colorScheme.error
                     )
                 }

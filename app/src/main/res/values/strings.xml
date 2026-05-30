@@ -8,9 +8,9 @@
     <string name="login_or_divider">or</string>
     <string name="login_google_button">Sign in with Google</string>
     <string name="login_register_link">Don\'t have an account? Sign up</string>
-    <string name="login_error_msg">Error logging in: %s</string>
-    <string name="login_google_failed">Google Sign-In failed: %s</string>
-    <string name="login_google_no_id_token">Google Sign-In failed: No ID Token</string>
+    <string name="login_error_msg">Error logging in: incorrect email or password</string>
+    <string name="login_google_failed">Google login failed</string>
+    <string name="login_google_no_id_token">Google login failed</string>
     <string name="default_web_client_id" translatable="false">561921512655-02afq638tkqrunfa4j5shfdb8fans5r7.apps.googleusercontent.com</string>
 
     <!-- Register Screen -->
@@ -25,7 +25,7 @@
     <string name="register_req_uppercase">At least one uppercase letter</string>
     <string name="register_req_number">At least one number</string>
     <string name="register_success">Account created successfully!</string>
-    <string name="register_error_msg">Error registering: %s</string>
+    <string name="register_error_msg">Error creating account. Please check the information provided.</string>
 
     <!-- Splash Screen -->
     <string name="splash_part1">Kingdom Of</string>
@@ -115,4 +115,10 @@
     <string name="char_image_error_loading">Could not load image. Check your connection or try using different words.</string>
     <string name="char_image_save_button">Link to Character</string>
     <string name="char_image_see_sheet_button">See on Sheet</string>
+    <string name="char_image_processing">AI is processing your image...</string>
+    <string name="char_image_saved">Image linked to character!</string>
+    <string name="char_image_error_save">Error linking image.</string>
+    <string name="char_image_error_ai">AI connection error.</string>
+    <string name="error_network">Connection error. Check your internet.</string>
+    <string name="error_generic">An error occurred. Please try again.</string>
 </resources>

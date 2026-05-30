@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Item
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Skill
@@ -27,6 +28,9 @@ class CharacterSheetViewModel @Inject constructor(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
+    private val _error = mutableStateOf<Int?>(null)
+    val error: State<Int?> = _error
+
     init {
         loadCharacter()
     }
@@ -34,8 +38,13 @@ class CharacterSheetViewModel @Inject constructor(
     private fun loadCharacter() {
         viewModelScope.launch {
             _isLoading.value = true
-            _character.value = characterRepository.getCharacterById(characterId)
-            _isLoading.value = false
+            try {
+                _character.value = characterRepository.getCharacterById(characterId)
+            } catch (e: Exception) {
+                handleError(e)
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
@@ -85,8 +94,6 @@ class CharacterSheetViewModel @Inject constructor(
         var newMaxXp = currentChar.maxXp
         var newPoints = currentChar.attributePoints
 
-        // Lógica: Nível 1 -> 2 (100xp), Nível 2 -> 3 (200xp), Nível 3 -> 4 (300xp)
-        // A regra é: maxXp = nível_atual * 100
         while (newXp >= newMaxXp) {
             newXp -= newMaxXp
             newLevel++
@@ -176,8 +183,36 @@ class CharacterSheetViewModel @Inject constructor(
 
     private fun saveCharacter(character: Character) {
         viewModelScope.launch {
-            characterRepository.addCharacter(character)
-            _character.value = character
+            try {
+                characterRepository.addCharacter(character)
+                _character.value = character
+            } catch (e: Exception) {
+                handleError(e)
+            }
         }
+    }
+
+    private fun handleError(e: Exception) {
+        if (isNetworkError(e)) {
+            _error.value = R.string.error_network
+        } else {
+            _error.value = R.string.error_generic
+        }
+    }
+
+    private fun isNetworkError(e: Throwable?): Boolean {
+        if (e == null) return false
+        val message = e.message?.lowercase() ?: ""
+        return e is java.net.UnknownHostException ||
+                e is java.net.ConnectException ||
+                e is java.net.SocketTimeoutException ||
+                message.contains("network error") ||
+                message.contains("unreachable host") ||
+                message.contains("firebasenetworkexception") ||
+                isNetworkError(e.cause)
+    }
+
+    fun resetError() {
+        _error.value = null
     }
 }

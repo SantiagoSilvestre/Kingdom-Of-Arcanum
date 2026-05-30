@@ -34,8 +34,17 @@ fun CharacterDetailScreen(
     val agility by viewModel.agility
     val isLoading by viewModel.isLoading
     val isSaved by viewModel.isSaved
+    val error by viewModel.error
     val isNewCharacter = viewModel.isNewCharacter
     val scrollState = rememberScrollState()
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            android.widget.Toast.makeText(context, context.getString(it), android.widget.Toast.LENGTH_SHORT).show()
+            viewModel.resetError()
+        }
+    }
 
     LaunchedEffect(isSaved) {
         if (isSaved) {

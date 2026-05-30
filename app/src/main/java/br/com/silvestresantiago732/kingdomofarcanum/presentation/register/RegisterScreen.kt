@@ -31,6 +31,7 @@ fun RegisterScreen(
     val confirmPassword by viewModel.confirmPassword
     val isLoading by viewModel.isLoading
     val registerResult by viewModel.registerResult
+    val error by viewModel.error
     
     var passwordVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -42,18 +43,18 @@ fun RegisterScreen(
     val hasNumber = password.any { it.isDigit() }
     val passwordsMatch = password.isNotEmpty() && password == confirmPassword
 
+    LaunchedEffect(error) {
+        error?.let {
+            Toast.makeText(context, context.getString(it), Toast.LENGTH_LONG).show()
+            viewModel.resetResult()
+        }
+    }
+
     LaunchedEffect(registerResult) {
         registerResult?.let { result ->
             if (result.isSuccess) {
                 Toast.makeText(context, context.getString(R.string.register_success), Toast.LENGTH_SHORT).show()
                 onRegisterSuccess()
-            } else {
-                Toast.makeText(
-                    context,
-                    context.getString(R.string.register_error_msg, result.exceptionOrNull()?.message),
-                    Toast.LENGTH_LONG
-                ).show()
-                viewModel.resetResult()
             }
         }
     }

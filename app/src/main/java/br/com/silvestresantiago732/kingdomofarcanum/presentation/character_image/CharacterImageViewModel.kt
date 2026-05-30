@@ -3,6 +3,7 @@ package br.com.silvestresantiago732.kingdomofarcanum.presentation.character_imag
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,9 +33,6 @@ class CharacterImageViewModel @Inject constructor(
                 val character = characterRepository.getCharacterById(characterId)
                 val characterContext = "${character?.race} ${character?.characterClass}".trim()
                 
-                // Melhorando o prompt: 
-                // 1. Adicionamos contexto de arte digital épica
-                // 2. Traduzimos termos comuns de RPG que podem ser filtrados ou mal interpretados
                 val artisticPrompt = prompt
                     .replace("faca", "dagger", ignoreCase = true)
                 
@@ -44,9 +42,9 @@ class CharacterImageViewModel @Inject constructor(
                 val url = "https://image.pollinations.ai/prompt/$encodedPrompt?width=1024&height=1024&nologo=true&seed=${System.currentTimeMillis()}"
                 
                 _generatedImageUrl.value = url
-                _uiState.value = UiState.Success("IA está processando sua imagem...")
+                _uiState.value = UiState.Success(R.string.char_image_processing)
             } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.localizedMessage ?: "Erro de conexão com a IA")
+                handleError(e)
             }
         }
     }
@@ -59,11 +57,32 @@ class CharacterImageViewModel @Inject constructor(
                 character?.let {
                     val updatedChar = it.copy(imageUrl = url)
                     characterRepository.addCharacter(updatedChar)
-                    _uiState.value = UiState.Success("Imagem vinculada ao personagem!")
+                    _uiState.value = UiState.Success(R.string.char_image_saved)
                 }
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Erro ao vincular imagem")
+                handleError(e)
             }
         }
+    }
+
+    private fun handleError(e: Exception) {
+        val errorRes = if (isNetworkError(e)) {
+            R.string.error_network
+        } else {
+            R.string.error_generic
+        }
+        _uiState.value = UiState.Error(errorRes)
+    }
+
+    private fun isNetworkError(e: Throwable?): Boolean {
+        if (e == null) return false
+        val message = e.message?.lowercase() ?: ""
+        return e is java.net.UnknownHostException ||
+                e is java.net.ConnectException ||
+                e is java.net.SocketTimeoutException ||
+                message.contains("network error") ||
+                message.contains("unreachable host") ||
+                message.contains("firebasenetworkexception") ||
+                isNetworkError(e.cause)
     }
 }

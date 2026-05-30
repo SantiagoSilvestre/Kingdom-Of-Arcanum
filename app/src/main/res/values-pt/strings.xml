@@ -9,9 +9,9 @@
     <string name="login_or_divider">ou</string>
     <string name="login_google_button">Entrar com Google</string>
     <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
-    <string name="login_error_msg">Erro ao entrar: %s</string>
-    <string name="login_google_failed">Falha no login com Google: %s</string>
-    <string name="login_google_no_id_token">Falha no login com Google: Sem token de ID</string>
+    <string name="login_error_msg">Erro ao entrar: e-mail ou senha incorretos</string>
+    <string name="login_google_failed">Falha no login com Google</string>
+    <string name="login_google_no_id_token">Falha no login com Google</string>
 
     <!-- Register Screen -->
     <string name="register_title">Criar Conta</string>
@@ -25,7 +25,7 @@
     <string name="register_req_uppercase">Pelo menos uma letra maiúscula</string>
     <string name="register_req_number">Pelo menos um número</string>
     <string name="register_success">Conta criada com sucesso!</string>
-    <string name="register_error_msg">Erro ao cadastrar: %s</string>
+    <string name="register_error_msg">Erro ao criar conta. Verifique os dados informados.</string>
 
     <!-- Splash Screen -->
     <string name="splash_part1">Kingdom Of</string>
@@ -115,4 +115,10 @@
     <string name="char_image_error_loading">Não foi possível carregar a imagem. Verifique sua conexão ou tente usar palavras diferentes.</string>
     <string name="char_image_save_button">Vincular ao Personagem</string>
     <string name="char_image_see_sheet_button">Ver na Ficha</string>
+    <string name="char_image_processing">IA está processando sua imagem...</string>
+    <string name="char_image_saved">Imagem vinculada ao personagem!</string>
+    <string name="char_image_error_save">Erro ao vincular imagem.</string>
+    <string name="char_image_error_ai">Erro de conexão com a IA.</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_generic">Ocorreu um erro. Tente novamente.</string>
 </resources>

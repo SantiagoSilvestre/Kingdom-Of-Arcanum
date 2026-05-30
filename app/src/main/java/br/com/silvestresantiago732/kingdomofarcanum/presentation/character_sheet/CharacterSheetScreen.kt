@@ -50,9 +50,18 @@ fun CharacterSheetScreen(
 ) {
     val character by viewModel.character
     val isLoading by viewModel.isLoading
+    val error by viewModel.error
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    
+    val context = androidx.compose.ui.platform.LocalContext.current
+
+    LaunchedEffect(error) {
+        error?.let {
+            android.widget.Toast.makeText(context, context.getString(it), android.widget.Toast.LENGTH_SHORT).show()
+            viewModel.resetError()
+        }
+    }
+
     var showSkillDialog by remember { mutableStateOf(false) }
     var showItemDialog by remember { mutableStateOf(false) }
     var showAttributePointsDialog by remember { mutableStateOf(false) }

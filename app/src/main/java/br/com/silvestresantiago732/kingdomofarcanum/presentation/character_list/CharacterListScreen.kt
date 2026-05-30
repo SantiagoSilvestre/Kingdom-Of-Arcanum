@@ -28,7 +28,16 @@ fun CharacterListScreen(
     viewModel: CharacterListViewModel = hiltViewModel()
 ) {
     val characters by viewModel.characters.collectAsState()
+    val error by viewModel.error
+    val context = androidx.compose.ui.platform.LocalContext.current
     var characterToDelete by remember { mutableStateOf<Character?>(null) }
+
+    LaunchedEffect(error) {
+        error?.let {
+            android.widget.Toast.makeText(context, context.getString(it), android.widget.Toast.LENGTH_SHORT).show()
+            viewModel.resetError()
+        }
+    }
 
     if (characterToDelete != null) {
         DeleteConfirmationDialog(

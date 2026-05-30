@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +51,9 @@ class CharacterDetailViewModel @Inject constructor(
     private val _isSaved = mutableStateOf(false)
     val isSaved: State<Boolean> = _isSaved
 
+    private val _error = mutableStateOf<Int?>(null)
+    val error: State<Int?> = _error
+
     val isNewCharacter: Boolean = characterId == "new"
 
     init {
@@ -62,18 +67,26 @@ class CharacterDetailViewModel @Inject constructor(
     private fun loadCharacter(id: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            val character = characterRepository.getCharacterById(id)
-            character?.let {
-                _name.value = it.name
-                _race.value = it.race
-                _characterClass.value = it.characterClass
-                _observation.value = it.observation
-                _lore.value = it.lore
-                _intelligence.value = it.intelligence.toString()
-                _strength.value = it.strength.toString()
-                _agility.value = it.agility.toString()
+            try {
+                // Timeout de 10 segundos para carregar
+                val character = withTimeout(10000) {
+                    characterRepository.getCharacterById(id)
+                }
+                character?.let {
+                    _name.value = it.name
+                    _race.value = it.race
+                    _characterClass.value = it.characterClass
+                    _observation.value = it.observation
+                    _lore.value = it.lore
+                    _intelligence.value = it.intelligence.toString()
+                    _strength.value = it.strength.toString()
+                    _agility.value = it.agility.toString()
+                }
+            } catch (e: Exception) {
+                handleError(e)
+            } finally {
+                _isLoading.value = false
             }
-            _isLoading.value = false
         }
     }
 
@@ -114,28 +127,62 @@ class CharacterDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             _isLoading.value = true
-            val intVal = _intelligence.value.toIntOrNull() ?: 0
-            val strVal = _strength.value.toIntOrNull() ?: 0
-            val agiVal = _agility.value.toIntOrNull() ?: 0
-            
-            val character = Character(
-                id = if (characterId == "new") "" else characterId ?: "",
-                name = _name.value,
-                race = _race.value,
-                characterClass = _characterClass.value,
-                observation = _observation.value,
-                lore = _lore.value,
-                intelligence = intVal,
-                strength = strVal,
-                agility = agiVal,
-                maxHp = strVal * 5,
-                currentHp = strVal * 5,
-                maxMana = intVal * 5,
-                currentMana = intVal * 5
-            )
-            characterRepository.addCharacter(character)
-            _isLoading.value = false
-            _isSaved.value = true
+            try {
+                val intVal = _intelligence.value.toIntOrNull() ?: 0
+                val strVal = _strength.value.toIntOrNull() ?: 0
+                val agiVal = _agility.value.toIntOrNull() ?: 0
+                
+                val character = Character(
+                    id = if (characterId == "new") "" else characterId ?: "",
+                    name = _name.value,
+                    race = _race.value,
+                    characterClass = _characterClass.value,
+                    observation = _observation.value,
+                    lore = _lore.value,
+                    intelligence = intVal,
+                    strength = strVal,
+                    agility = agiVal,
+                    maxHp = strVal * 5,
+                    currentHp = strVal * 5,
+                    maxMana = intVal * 5,
+                    currentMana = intVal * 5
+                )
+                
+                // Timeout de 10 segundos para salvar no Firebase
+                withTimeout(10000) {
+                    characterRepository.addCharacter(character)
+                }
+                _isSaved.value = true
+            } catch (e: Exception) {
+                handleError(e)
+            } finally {
+                _isLoading.value = false
+            }
         }
+    }
+
+    private fun handleError(e: Exception) {
+        if (isNetworkError(e)) {
+            _error.value = R.string.error_network
+        } else {
+            _error.value = R.string.error_generic
+        }
+    }
+
+    private fun isNetworkError(e: Throwable?): Boolean {
+        if (e == null) return false
+        val message = e.message?.lowercase() ?: ""
+        return e is java.net.UnknownHostException ||
+                e is java.net.ConnectException ||
+                e is java.net.SocketTimeoutException ||
+                e is kotlinx.coroutines.TimeoutCancellationException || // Captura o estouro de tempo
+                message.contains("network error") ||
+                message.contains("unreachable host") ||
+                message.contains("firebasenetworkexception") ||
+                isNetworkError(e.cause)
+    }
+
+    fun resetError() {
+        _error.value = null
     }
 }
