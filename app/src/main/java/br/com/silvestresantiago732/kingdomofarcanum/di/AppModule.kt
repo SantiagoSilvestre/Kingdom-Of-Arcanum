@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import br.com.silvestresantiago732.kingdomofarcanum.data.repository.CharacterRepositoryImpl
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
 import dagger.Binds
@@ -41,7 +42,15 @@ abstract class AppModule {
         @Provides
         @Singleton
         fun provideFirebaseDatabase(): FirebaseDatabase {
-            return FirebaseDatabase.getInstance()
+            val db = FirebaseDatabase.getInstance()
+            db.setPersistenceEnabled(true)
+            return db
+        }
+
+        @Provides
+        @Singleton
+        fun provideFirebaseStorage(): FirebaseStorage {
+            return FirebaseStorage.getInstance()
         }
 
         @Provides

@@ -12,7 +12,6 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +45,6 @@ class MainActivity : ComponentActivity() {
     @javax.inject.Inject
     lateinit var authRepository: AuthRepository
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -74,7 +72,7 @@ class MainActivity : ComponentActivity() {
                             Spacer(modifier = Modifier.height(16.dp))
                             HorizontalDivider()
                             NavigationDrawerItem(
-                                label = { Text(text = "Home") },
+                                label = { Text(text = stringResource(id = R.string.home_title)) },
                                 selected = currentRoute == Screen.Home.route,
                                 onClick = {
                                     scope.launch { drawerState.close() }
@@ -119,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                         }) {
                                             Icon(
                                                 imageVector = Icons.Default.Menu,
-                                                contentDescription = "Menu"
+                                                contentDescription = stringResource(id = R.string.char_sheet_menu_desc)
                                             )
                                         }
                                     }

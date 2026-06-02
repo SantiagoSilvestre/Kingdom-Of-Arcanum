@@ -25,13 +25,17 @@ class CharacterSheetViewModel @Inject constructor(
     private val _character = mutableStateOf<Character?>(null)
     val character: State<Character?> = _character
 
-    private val _isLoading = mutableStateOf(false)
+    private val _isLoading = mutableStateOf(value = false)
     val isLoading: State<Boolean> = _isLoading
 
     private val _error = mutableStateOf<Int?>(null)
     val error: State<Int?> = _error
 
     init {
+        loadCharacter()
+    }
+
+    fun retryLoad() {
         loadCharacter()
     }
 
@@ -51,7 +55,7 @@ class CharacterSheetViewModel @Inject constructor(
     fun updateAttribute(type: String, value: Int) {
         val currentChar = _character.value ?: return
         
-        var updatedChar = when (type) {
+        val updatedChar = when (type) {
             "gold" -> currentChar.copy(gold = value)
             else -> currentChar
         }
@@ -203,13 +207,14 @@ class CharacterSheetViewModel @Inject constructor(
     private fun isNetworkError(e: Throwable?): Boolean {
         if (e == null) return false
         val message = e.message?.lowercase() ?: ""
-        return e is java.net.UnknownHostException ||
+        return (e is java.net.UnknownHostException ||
                 e is java.net.ConnectException ||
                 e is java.net.SocketTimeoutException ||
+                e is kotlinx.coroutines.TimeoutCancellationException ||
                 message.contains("network error") ||
                 message.contains("unreachable host") ||
                 message.contains("firebasenetworkexception") ||
-                isNetworkError(e.cause)
+                isNetworkError(e.cause))
     }
 
     fun resetError() {

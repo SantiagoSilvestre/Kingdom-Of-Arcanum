@@ -3,6 +3,7 @@ package br.com.silvestresantiago732.kingdomofarcanum.presentation.login
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,7 +11,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +40,8 @@ fun LoginScreen(
     val error by viewModel.error
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val uriHandler = LocalUriHandler.current
+    val termsOfUseUrl = "https://santiagosilvestre.github.io/motivacionalDia/"
 
     LaunchedEffect(error) {
         error?.let {
@@ -89,6 +96,17 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.kings_of_arcanum),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(180.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
@@ -181,6 +199,17 @@ fun LoginScreen(
                 enabled = !isLoading
             ) {
                 Text(stringResource(R.string.login_register_link))
+            }
+
+            TextButton(
+                onClick = { uriHandler.openUri(termsOfUseUrl) },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.login_terms_of_use),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

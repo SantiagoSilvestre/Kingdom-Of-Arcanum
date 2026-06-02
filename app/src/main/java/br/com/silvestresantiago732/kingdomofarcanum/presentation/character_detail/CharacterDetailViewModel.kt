@@ -10,7 +10,6 @@ import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,10 +67,7 @@ class CharacterDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Timeout de 10 segundos para carregar
-                val character = withTimeout(10000) {
-                    characterRepository.getCharacterById(id)
-                }
+                val character = characterRepository.getCharacterById(id)
                 character?.let {
                     _name.value = it.name
                     _race.value = it.race
@@ -148,10 +144,8 @@ class CharacterDetailViewModel @Inject constructor(
                     currentMana = intVal * 5
                 )
                 
-                // Timeout de 10 segundos para salvar no Firebase
-                withTimeout(10000) {
-                    characterRepository.addCharacter(character)
-                }
+                // Salvando no Firebase
+                characterRepository.addCharacter(character)
                 _isSaved.value = true
             } catch (e: Exception) {
                 handleError(e)

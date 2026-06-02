@@ -18,6 +18,10 @@ class CharacterImageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    companion object {
+        private const val POLLINATIONS_BASE_URL = "https://image.pollinations.ai/prompt/"
+    }
+
     private val characterId: String = checkNotNull(savedStateHandle["characterId"])
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
@@ -39,7 +43,7 @@ class CharacterImageViewModel @Inject constructor(
                 val finalPrompt = "Digital art, full color RPG character portrait, $characterContext, $artisticPrompt, high fantasy world, detailed armor, cinematic lighting, masterpiece, 8k resolution"
                 
                 val encodedPrompt = java.net.URLEncoder.encode(finalPrompt, "UTF-8")
-                val url = "https://image.pollinations.ai/prompt/$encodedPrompt?width=1024&height=1024&nologo=true&seed=${System.currentTimeMillis()}"
+                val url = "$POLLINATIONS_BASE_URL$encodedPrompt?width=1024&height=1024&nologo=true&seed=${System.currentTimeMillis()}"
                 
                 _generatedImageUrl.value = url
                 _uiState.value = UiState.Success(R.string.char_image_processing)
@@ -50,14 +54,25 @@ class CharacterImageViewModel @Inject constructor(
     }
 
     fun saveImageToCharacter() {
-        val url = _generatedImageUrl.value ?: return
+        val pollinationsUrl = _generatedImageUrl.value ?: return
+        _uiState.value = UiState.Loading
         viewModelScope.launch {
             try {
-                val character = characterRepository.getCharacterById(characterId)
-                character?.let {
-                    val updatedChar = it.copy(imageUrl = url)
-                    characterRepository.addCharacter(updatedChar)
-                    _uiState.value = UiState.Success(R.string.char_image_saved)
+                // Primeiro: Faz o upload para o Firebase Storage e obtém a URL interna
+                val uploadResult = characterRepository.uploadCharacterImage(characterId, pollinationsUrl)
+                
+                if (uploadResult.isSuccess) {
+                    val firebaseDownloadUrl = uploadResult.getOrThrow()
+                    
+                    // Segundo: Atualiza o personagem no Realtime Database com a nova URL do Storage
+                    val character = characterRepository.getCharacterById(characterId)
+                    character?.let {
+                        val updatedChar = it.copy(imageUrl = firebaseDownloadUrl)
+                        characterRepository.addCharacter(updatedChar)
+                        _uiState.value = UiState.Success(R.string.char_image_saved)
+                    }
+                } else {
+                    _uiState.value = UiState.Error(R.string.char_image_error_save)
                 }
             } catch (e: Exception) {
                 handleError(e)

@@ -8,9 +8,7 @@ import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,15 +17,34 @@ class CharacterListViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : ViewModel() {
 
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
     private val _error = mutableStateOf<Int?>(null)
     val error: State<Int?> = _error
 
-    val characters: StateFlow<List<Character>> = characterRepository.getCharacters()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    private val _characters = kotlinx.coroutines.flow.MutableStateFlow<List<Character>>(emptyList())
+    val characters = _characters.asStateFlow()
+
+    init {
+        loadCharacters()
+    }
+
+    fun loadCharacters() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                // Coleta os personagens e desativa o loading no primeiro resultado
+                characterRepository.getCharacters().collect {
+                    _characters.value = it
+                    _isLoading.value = false
+                }
+            } catch (e: Exception) {
+                handleError(e)
+                _isLoading.value = false
+            }
+        }
+    }
 
     fun deleteCharacter(id: String) {
         viewModelScope.launch {
@@ -53,6 +70,7 @@ class CharacterListViewModel @Inject constructor(
         return e is java.net.UnknownHostException ||
                 e is java.net.ConnectException ||
                 e is java.net.SocketTimeoutException ||
+                e is kotlinx.coroutines.TimeoutCancellationException ||
                 message.contains("network error") ||
                 message.contains("unreachable host") ||
                 message.contains("firebasenetworkexception") ||

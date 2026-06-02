@@ -8,6 +8,8 @@
     <string name="login_or_divider">or</string>
     <string name="login_google_button">Sign in with Google</string>
     <string name="login_register_link">Don\'t have an account? Sign up</string>
+    <string name="login_terms_of_use">Terms of Use</string>
+    <string name="login_privacy_policy">Privacy Policy</string>
     <string name="login_forgot_password">Forgot password?</string>
     <string name="login_error_msg">Error logging in: incorrect email or password</string>
     <string name="login_google_failed">Google login failed</string>
@@ -34,6 +36,7 @@
     <string name="splash_subtitle">Magic and Technology</string>
 
     <!-- Settings & AppBar -->
+    <string name="home_title">Home</string>
     <string name="logout_button">Logout</string>
 
     <!-- Forgot Password Screen -->
@@ -80,6 +83,7 @@
     <string name="char_sheet_delete">Delete</string>
     <string name="char_sheet_back">Back</string>
     <string name="char_sheet_menu">Menu</string>
+    <string name="char_sheet_menu_desc">Open navigation menu</string>
     <string name="char_sheet_actions">Character Actions</string>
     <string name="char_sheet_edit_char">Edit Character</string>
     <string name="char_sheet_generate_image">Generate character image</string>

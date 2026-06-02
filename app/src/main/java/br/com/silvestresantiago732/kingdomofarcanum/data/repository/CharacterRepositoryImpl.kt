@@ -7,17 +7,22 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CharacterRepositoryImpl @Inject constructor(
     private val database: FirebaseDatabase,
-    private val auth: FirebaseAuth
+    private val auth: FirebaseAuth,
+    private val storage: FirebaseStorage
 ) : CharacterRepository {
 
     private val charactersRef = database.getReference("characters")
@@ -60,5 +65,24 @@ class CharacterRepositoryImpl @Inject constructor(
     override suspend fun deleteCharacter(id: String) {
         val uid = userId ?: return
         charactersRef.child(uid).child(id).removeValue().await()
+    }
+
+    override suspend fun uploadCharacterImage(characterId: String, imageUrl: String): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val uid = userId ?: return@withContext Result.failure(Exception("Usuário não autenticado"))
+            
+            // Download da imagem
+            val bytes = URL(imageUrl).openStream().use { it.readBytes() }
+            
+            // Upload para o Firebase Storage
+            val storageRef = storage.reference.child("character_images").child(uid).child("$characterId.jpg")
+            storageRef.putBytes(bytes).await()
+            
+            // Retorna a URL de download do Firebase
+            val downloadUrl = storageRef.downloadUrl.await().toString()
+            Result.success(downloadUrl)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

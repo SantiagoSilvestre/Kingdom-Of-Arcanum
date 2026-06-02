@@ -20,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import coil.compose.SubcomposeAsyncImage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterImageScreen(
     onBack: () -> Unit,

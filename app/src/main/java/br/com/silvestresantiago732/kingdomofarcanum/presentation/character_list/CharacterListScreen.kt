@@ -12,9 +12,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.silvestresantiago732.kingdomofarcanum.R
@@ -28,6 +31,7 @@ fun CharacterListScreen(
     viewModel: CharacterListViewModel = hiltViewModel()
 ) {
     val characters by viewModel.characters.collectAsState()
+    val isLoading by viewModel.isLoading
     val error by viewModel.error
     val context = androidx.compose.ui.platform.LocalContext.current
     var characterToDelete by remember { mutableStateOf<Character?>(null) }
@@ -58,7 +62,16 @@ fun CharacterListScreen(
             }
         }
     ) { padding ->
-        if (characters.isEmpty()) {
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (characters.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -143,7 +156,9 @@ fun CharacterItem(
                     modifier = Modifier
                         .size(48.dp)
                         .clip(androidx.compose.foundation.shape.CircleShape),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeholder = rememberVectorPainter(Icons.Default.Person),
+                    error = rememberVectorPainter(Icons.Default.Person)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
             }
@@ -151,17 +166,25 @@ fun CharacterItem(
                 Text(
                     text = character.name,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = "${character.race} ${character.characterClass} - ${stringResource(R.string.char_sheet_level)} ${character.level}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.secondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                Text(
-                    text = character.observation,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                if (character.observation.isNotBlank()) {
+                    Text(
+                        text = character.observation,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             IconButton(onClick = onDelete) {
                 Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.char_list_delete_content_desc))

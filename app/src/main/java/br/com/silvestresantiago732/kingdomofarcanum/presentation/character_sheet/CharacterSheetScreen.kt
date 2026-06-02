@@ -28,6 +28,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +42,6 @@ import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Skill
 import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterSheetScreen(
     onBack: () -> Unit,
@@ -117,7 +118,9 @@ fun CharacterSheetScreen(
                         model = character?.imageUrl,
                         contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Fit
+                        contentScale = ContentScale.Fit,
+                        placeholder = rememberVectorPainter(Icons.Default.Person),
+                        error = rememberVectorPainter(Icons.Default.Person)
                     )
                 }
             },
@@ -228,7 +231,9 @@ fun CharacterSheetScreen(
                                     modifier = Modifier
                                         .size(32.dp)
                                         .clip(androidx.compose.foundation.shape.CircleShape)
-                                        .clickable { showFullScreenImage = true }
+                                        .clickable { showFullScreenImage = true },
+                                    placeholder = rememberVectorPainter(Icons.Default.Person),
+                                    error = rememberVectorPainter(Icons.Default.Person)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                             }
@@ -257,6 +262,21 @@ fun CharacterSheetScreen(
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
+                }
+            } else if (character == null) {
+                // Estado de erro ou personagem não encontrado
+                Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(id = R.string.error_network),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(onClick = { viewModel.retryLoad() }) {
+                            Text(text = "Tentar Novamente")
+                        }
+                    }
                 }
             } else {
                 character?.let { char ->

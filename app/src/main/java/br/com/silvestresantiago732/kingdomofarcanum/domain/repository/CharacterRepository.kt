@@ -8,4 +8,5 @@ interface CharacterRepository {
     suspend fun getCharacterById(id: String): Character?
     suspend fun addCharacter(character: Character)
     suspend fun deleteCharacter(id: String)
+    suspend fun uploadCharacterImage(characterId: String, imageUrl: String): Result<String>
 }
