@@ -1,6 +1,7 @@
 package br.com.silvestresantiago732.kingdomofarcanum
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Spacer
@@ -9,25 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -55,8 +48,47 @@ class MainActivity : ComponentActivity() {
 
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
+                val context = LocalContext.current
+                var showDeleteAccountDialog by remember { mutableStateOf(false) }
 
                 val showGlobalAppBar = currentRoute == Screen.Home.route
+
+                if (showDeleteAccountDialog) {
+                    AlertDialog(
+                        onDismissRequest = { showDeleteAccountDialog = false },
+                        title = { Text(stringResource(R.string.delete_account_title)) },
+                        text = { Text(stringResource(R.string.delete_account_confirm)) },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    showDeleteAccountDialog = false
+                                    scope.launch {
+                                        val result = authRepository.deleteAccount()
+                                        if (result.isSuccess) {
+                                            navController.navigate(Screen.Login.route) {
+                                                popUpTo(0) { inclusive = true }
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                R.string.delete_account_error,
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        }
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                            ) {
+                                Text(stringResource(R.string.char_sheet_delete))
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showDeleteAccountDialog = false }) {
+                                Text(stringResource(R.string.char_sheet_cancel))
+                            }
+                        }
+                    )
+                }
 
                 ModalNavigationDrawer(
                     drawerState = drawerState,
@@ -97,6 +129,22 @@ class MainActivity : ComponentActivity() {
                                     Icon(
                                         Icons.AutoMirrored.Filled.ExitToApp,
                                         contentDescription = null
+                                    )
+                                },
+                                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                            )
+                            NavigationDrawerItem(
+                                label = { Text(text = stringResource(id = R.string.delete_account_button)) },
+                                selected = false,
+                                onClick = {
+                                    scope.launch { drawerState.close() }
+                                    showDeleteAccountDialog = true
+                                },
+                                icon = {
+                                    Icon(
+                                        Icons.Default.DeleteForever,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error
                                     )
                                 },
                                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)

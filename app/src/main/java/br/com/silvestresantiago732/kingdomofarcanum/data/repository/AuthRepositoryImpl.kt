@@ -57,4 +57,14 @@ class AuthRepositoryImpl @Inject constructor(
         firebaseAuth.signOut()
         googleSignInClient.signOut()
     }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        return try {
+            firebaseAuth.currentUser?.delete()?.await()
+            googleSignInClient.signOut().await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -42,6 +42,7 @@ fun LoginScreen(
     val scrollState = rememberScrollState()
     val uriHandler = LocalUriHandler.current
     val termsOfUseUrl = "https://santiagosilvestre.github.io/motivacionalDia/"
+    val dataDeletionUrl = "https://santiagosilvestre.github.io/motivacionalDia/delete-account"
 
     LaunchedEffect(error) {
         error?.let {
@@ -209,6 +210,17 @@ fun LoginScreen(
                     text = stringResource(R.string.login_terms_of_use),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            TextButton(
+                onClick = { uriHandler.openUri(dataDeletionUrl) },
+                modifier = Modifier.padding(top = 0.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.login_data_deletion),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
                 )
             }
         }

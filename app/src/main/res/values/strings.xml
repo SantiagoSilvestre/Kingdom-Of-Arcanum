@@ -9,6 +9,7 @@
     <string name="login_google_button">Sign in with Google</string>
     <string name="login_register_link">Don\'t have an account? Sign up</string>
     <string name="login_terms_of_use">Terms of Use</string>
+    <string name="login_data_deletion">Data Deletion Request</string>
     <string name="login_privacy_policy">Privacy Policy</string>
     <string name="login_forgot_password">Forgot password?</string>
     <string name="login_error_msg">Error logging in: incorrect email or password</string>
@@ -38,6 +39,11 @@
     <!-- Settings & AppBar -->
     <string name="home_title">Home</string>
     <string name="logout_button">Logout</string>
+    <string name="delete_account_button">Delete Account</string>
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_confirm">Are you sure you want to delete your account? This action is permanent and all your characters will be lost.</string>
+    <string name="delete_account_error">Error deleting account. You may need to log in again to perform this action.</string>
+
 
     <!-- Forgot Password Screen -->
     <string name="forgot_password_title">Recover Password</string>

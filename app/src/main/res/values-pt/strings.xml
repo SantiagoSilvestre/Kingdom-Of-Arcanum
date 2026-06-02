@@ -10,6 +10,7 @@
     <string name="login_google_button">Entrar com Google</string>
     <string name="login_register_link">Não tem uma conta? Cadastre-se</string>
     <string name="login_terms_of_use">Termos de Uso</string>
+    <string name="login_data_deletion">Solicitar Exclusão de Dados</string>
     <string name="login_privacy_policy">Política de Privacidade</string>
     <string name="login_forgot_password">Esqueceu a senha?</string>
     <string name="login_error_msg">Erro ao entrar: e-mail ou senha incorretos</string>
@@ -38,6 +39,11 @@
     <!-- Settings & AppBar -->
     <string name="home_title">Início</string>
     <string name="logout_button">Sair</string>
+    <string name="delete_account_button">Excluir Conta</string>
+    <string name="delete_account_title">Excluir Conta</string>
+    <string name="delete_account_confirm">Tem certeza que deseja excluir sua conta? Esta ação é permanente e todos os seus personagens serão perdidos.</string>
+    <string name="delete_account_error">Erro ao excluir conta. Você pode precisar fazer login novamente para realizar esta ação.</string>
+
 
     <!-- Forgot Password Screen -->
     <string name="forgot_password_title">Recuperar Senha</string>
