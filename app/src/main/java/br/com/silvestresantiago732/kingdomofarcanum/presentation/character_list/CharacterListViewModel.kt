@@ -57,6 +57,16 @@ class CharacterListViewModel @Inject constructor(
     }
 
     private fun handleError(e: Exception) {
+        android.util.Log.e("CharacterListVM", "Erro capturado: ${e.message}", e)
+        // Ignorar erros de permissão se o usuário estiver deslogado
+        val message = e.message?.lowercase() ?: ""
+        if (message.contains("permission") || 
+            message.contains("unauthenticated") || 
+            message.contains("user is null") ||
+            com.google.firebase.auth.FirebaseAuth.getInstance().currentUser == null) {
+            return
+        }
+
         if (isNetworkError(e)) {
             _error.value = R.string.error_network
         } else {

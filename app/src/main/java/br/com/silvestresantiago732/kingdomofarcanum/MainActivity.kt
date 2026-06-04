@@ -119,10 +119,14 @@ class MainActivity : ComponentActivity() {
                                 label = { Text(text = stringResource(id = R.string.logout_button)) },
                                 selected = false,
                                 onClick = {
-                                    scope.launch { drawerState.close() }
-                                    authRepository.logout()
-                                    navController.navigate(Screen.Login.route) {
-                                        popUpTo(0) { inclusive = true }
+                                    scope.launch {
+                                        drawerState.close()
+                                        // Navegar primeiro para desativar os observadores da tela atual
+                                        navController.navigate(Screen.Login.route) {
+                                            popUpTo(0) { inclusive = true }
+                                        }
+                                        // Deslogar depois da navegação iniciada
+                                        authRepository.logout()
                                     }
                                 },
                                 icon = {

@@ -74,9 +74,19 @@ class CharacterRepositoryImpl @Inject constructor(
             // Download da imagem
             val bytes = URL(imageUrl).openStream().use { it.readBytes() }
             
+            uploadCharacterImageBytes(characterId, bytes)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun uploadCharacterImageBytes(characterId: String, imageBytes: ByteArray): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            val uid = userId ?: return@withContext Result.failure(Exception("Usuário não autenticado"))
+            
             // Upload para o Firebase Storage
             val storageRef = storage.reference.child("character_images").child(uid).child("$characterId.jpg")
-            storageRef.putBytes(bytes).await()
+            storageRef.putBytes(imageBytes).await()
             
             // Retorna a URL de download do Firebase
             val downloadUrl = storageRef.downloadUrl.await().toString()

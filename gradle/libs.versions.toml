@@ -10,10 +10,9 @@ activityCompose = "1.8.0"
 kotlin = "2.3.21"
 composeBom = "2026.05.01"
 navigationCompose = "2.7.7"
-firebaseAi = "17.12.0"
 googleGmsGoogleServices = "4.4.4"
 hilt = "2.58"
-firebaseBom = "33.10.0"
+firebaseBom = "34.14.0"
 playServicesCoroutines = "1.8.1"
 playServicesAuth = "21.3.0"
 coil = "2.6.0"
@@ -40,7 +39,9 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-firebase-ai = { group = "com.google.firebase", name = "firebase-ai", version.ref = "firebaseAi" }
+firebase-ai = { group = "com.google.firebase", name = "firebase-ai" }
+firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" }
+firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }

@@ -1,5 +1,6 @@
 package br.com.silvestresantiago732.kingdomofarcanum.presentation.character_image
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import coil.compose.SubcomposeAsyncImage
+import coil.network.HttpException
 
 @Composable
 fun CharacterImageScreen(
@@ -28,6 +30,7 @@ fun CharacterImageScreen(
     var prompt by remember { mutableStateOf("") }
     val uiState by viewModel.uiState.collectAsState()
     val generatedImageUrl by viewModel.generatedImageUrl.collectAsState()
+    val generatedBitmap by viewModel.generatedBitmap.collectAsState()
 
     Scaffold(
         topBar = {
@@ -76,7 +79,7 @@ fun CharacterImageScreen(
                 }
             }
 
-            generatedImageUrl?.let { url ->
+            if (generatedBitmap != null || generatedImageUrl != null) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -89,7 +92,7 @@ fun CharacterImageScreen(
                         )
                 ) {
                     SubcomposeAsyncImage(
-                        model = url,
+                        model = generatedBitmap ?: generatedImageUrl,
                         contentDescription = stringResource(R.string.char_image_generated_desc),
                         loading = {
                             Box(
@@ -99,7 +102,16 @@ fun CharacterImageScreen(
                                 CircularProgressIndicator()
                             }
                         },
-                        error = {
+                        error = { state ->
+                            val errorException = state.result.throwable
+                            Log.e("CharacterImage", "Erro ao carregar imagem: ", errorException)
+                            
+                            val errorMessage = if (errorException is HttpException && errorException.response.code == 402) {
+                                R.string.char_image_error_limit
+                            } else {
+                                R.string.char_image_error_loading
+                            }
+
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -115,7 +127,7 @@ fun CharacterImageScreen(
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = stringResource(R.string.char_image_error_loading),
+                                    text = stringResource(errorMessage),
                                     color = MaterialTheme.colorScheme.error,
                                     style = MaterialTheme.typography.bodySmall,
                                     textAlign = androidx.compose.ui.text.style.TextAlign.Center

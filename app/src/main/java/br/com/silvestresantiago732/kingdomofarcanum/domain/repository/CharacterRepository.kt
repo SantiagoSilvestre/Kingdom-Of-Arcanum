@@ -9,4 +9,5 @@ interface CharacterRepository {
     suspend fun addCharacter(character: Character)
     suspend fun deleteCharacter(id: String)
     suspend fun uploadCharacterImage(characterId: String, imageUrl: String): Result<String>
+    suspend fun uploadCharacterImageBytes(characterId: String, imageBytes: ByteArray): Result<String>
 }

@@ -16,6 +16,8 @@
     <string name="login_google_failed">Google login failed</string>
     <string name="login_google_no_id_token">Google login failed</string>
     <string name="default_web_client_id" translatable="false">561921512655-02afq638tkqrunfa4j5shfdb8fans5r7.apps.googleusercontent.com</string>
+    <string name="google_app_id" translatable="false">1:561921512655:android:c98a58e8b8c2c6d4</string>
+    <string name="google_api_key" translatable="false">AIzaSyA7gsxG6KgSuvFcI2vyE1fZSNgDhfp3zpg</string>
 
     <!-- Register Screen -->
     <string name="register_title">Create Account</string>
@@ -137,6 +139,7 @@
     <string name="char_image_saved">Image linked to character!</string>
     <string name="char_image_error_save">Error linking image.</string>
     <string name="char_image_error_ai">AI connection error.</string>
+    <string name="char_image_error_limit">Generation limit reached for today. Try again later or register at pollinations.ai.</string>
     <string name="error_network">Connection error. Check your internet.</string>
     <string name="error_generic">An error occurred. Please try again.</string>
     <string name="empty_list_message">No records added</string>
