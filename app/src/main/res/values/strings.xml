@@ -137,7 +137,8 @@
     <string name="char_image_saved">Image linked to character!</string>
     <string name="char_image_error_save">Error linking image.</string>
     <string name="char_image_error_ai">AI connection error.</string>
-    <string name="char_image_error_limit">Generation limit reached for today. Try again later or register at pollinations.ai.</string>
+    <string name="char_image_error_limit">Daily limit of 3 images reached. Try again tomorrow!</string>
+    <string name="char_image_limit_info">You have %d generation(s) remaining today.</string>
     <string name="error_network">Connection error. Check your internet.</string>
     <string name="error_generic">An error occurred. Please try again.</string>
     <string name="empty_list_message">No records added</string>

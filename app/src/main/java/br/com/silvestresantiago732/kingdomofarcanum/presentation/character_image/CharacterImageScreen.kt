@@ -31,6 +31,7 @@ fun CharacterImageScreen(
     val uiState by viewModel.uiState.collectAsState()
     val generatedImageUrl by viewModel.generatedImageUrl.collectAsState()
     val generatedBitmap by viewModel.generatedBitmap.collectAsState()
+    val generationsRemaining by viewModel.generationsRemaining.collectAsState()
 
     Scaffold(
         topBar = {
@@ -67,10 +68,16 @@ fun CharacterImageScreen(
                 minLines = 3
             )
 
+            Text(
+                text = stringResource(R.string.char_image_limit_info, generationsRemaining),
+                style = MaterialTheme.typography.labelMedium,
+                color = if (generationsRemaining > 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error
+            )
+
             Button(
                 onClick = { viewModel.generateImage(prompt) },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = prompt.isNotBlank() && uiState !is UiState.Loading
+                enabled = prompt.isNotBlank() && uiState !is UiState.Loading && generationsRemaining > 0
             ) {
                 if (uiState is UiState.Loading) {
                     CustomCircularProgressIndicator(size = 20.dp, color = MaterialTheme.colorScheme.onPrimary)

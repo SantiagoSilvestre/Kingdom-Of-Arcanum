@@ -2,7 +2,6 @@ package br.com.silvestresantiago732.kingdomofarcanum
 
 import android.app.Application
 import android.util.Log
-import br.com.silvestresantiago732.kingdomofarcanum.util.Logger
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
@@ -23,7 +22,7 @@ class KingdomApplication : Application() {
             Log.d("AppCheck", "App Check Debug Provider installed. Check Logcat for the debug token.")
         } else {
             firebaseAppCheck.installAppCheckProviderFactory(
-                PlayIntegrityAppCheckProviderFactory.getInstance()
+                PlayIntegrityAppCheckProviderFactory.getInstance(),
             )
         }
         firebaseAppCheck.setTokenAutoRefreshEnabled(true)

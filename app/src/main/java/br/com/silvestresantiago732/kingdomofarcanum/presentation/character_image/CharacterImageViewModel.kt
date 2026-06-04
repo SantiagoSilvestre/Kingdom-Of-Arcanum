@@ -37,12 +37,49 @@ class CharacterImageViewModel @Inject constructor(
     private val _generatedBitmap = MutableStateFlow<Bitmap?>(null)
     val generatedBitmap: StateFlow<Bitmap?> = _generatedBitmap.asStateFlow()
 
+    private val _generationsRemaining = MutableStateFlow(3)
+    val generationsRemaining: StateFlow<Int> = _generationsRemaining.asStateFlow()
+
+    init {
+        loadCharacterInfo()
+    }
+
+    private fun loadCharacterInfo() {
+        viewModelScope.launch {
+            val character = characterRepository.getCharacterById(characterId)
+            character?.let {
+                updateRemainingGenerations(it)
+            }
+        }
+    }
+
+    private fun updateRemainingGenerations(character: br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character) {
+        val currentTime = System.currentTimeMillis()
+        val isNewDay = !isSameDay(character.lastImageGenerationTimestamp, currentTime)
+        val currentGenerations = if (isNewDay) 0 else character.imageGenerationsToday
+        _generationsRemaining.value = (3 - currentGenerations).coerceAtLeast(0)
+    }
+
     fun generateImage(prompt: String) {
         _uiState.value = UiState.Loading
         viewModelScope.launch {
             try {
                 val character = characterRepository.getCharacterById(characterId)
-                val characterContext = "${character?.race} ${character?.characterClass}".trim()
+                    ?: return@launch handleError(Exception("Character not found"))
+
+                // Validação de limite diário
+                val currentTime = System.currentTimeMillis()
+                val isNewDay = !isSameDay(character.lastImageGenerationTimestamp, currentTime)
+                
+                val currentGenerations = if (isNewDay) 0 else character.imageGenerationsToday
+                
+                if (currentGenerations >= 3) {
+                    _uiState.value = UiState.Error(R.string.char_image_error_limit)
+                    _generationsRemaining.value = 0
+                    return@launch
+                }
+
+                val characterContext = "${character.race} ${character.characterClass}".trim()
                 
                 val finalPrompt = """
                     Generate a full color RPG character portrait illustration.
@@ -53,7 +90,7 @@ class CharacterImageViewModel @Inject constructor(
                 """.trimIndent()
 
                 val model = Firebase.ai.generativeModel(
-                    modelName = "gemini-1.5-flash",
+                    modelName = "gemini-2.5-flash-image",
                     // Configure the model to respond with text and images (required)
                     generationConfig = generationConfig {
                         responseModalities = listOf(ResponseModality.TEXT, ResponseModality.IMAGE) }
@@ -73,6 +110,14 @@ class CharacterImageViewModel @Inject constructor(
                 }
                 
                 if (foundBitmap != null) {
+                    // Atualiza contador de gerações
+                    val updatedCharacter = character.copy(
+                        imageGenerationsToday = currentGenerations + 1,
+                        lastImageGenerationTimestamp = currentTime
+                    )
+                    characterRepository.addCharacter(updatedCharacter)
+                    updateRemainingGenerations(updatedCharacter)
+
                     _generatedBitmap.value = foundBitmap
                     _generatedImageUrl.value = "bitmap_placeholder" 
                     _uiState.value = UiState.Success(R.string.char_image_processing)
@@ -84,6 +129,13 @@ class CharacterImageViewModel @Inject constructor(
                 handleError(e)
             }
         }
+    }
+
+    private fun isSameDay(timestamp1: Long, timestamp2: Long): Boolean {
+        val cal1 = java.util.Calendar.getInstance().apply { timeInMillis = timestamp1 }
+        val cal2 = java.util.Calendar.getInstance().apply { timeInMillis = timestamp2 }
+        return cal1.get(java.util.Calendar.YEAR) == cal2.get(java.util.Calendar.YEAR) &&
+                cal1.get(java.util.Calendar.DAY_OF_YEAR) == cal2.get(java.util.Calendar.DAY_OF_YEAR)
     }
 
     fun saveImageToCharacter() {

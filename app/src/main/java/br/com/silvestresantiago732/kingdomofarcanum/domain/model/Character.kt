@@ -21,5 +21,7 @@ data class Character(
     val gold: Int = 0,
     val attributePoints: Int = 0,
     val skills: List<Skill> = emptyList(),
-    val items: List<Item> = emptyList()
+    val items: List<Item> = emptyList(),
+    val imageGenerationsToday: Int = 0,
+    val lastImageGenerationTimestamp: Long = 0L
 )
