@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.model.Character
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
+import br.com.silvestresantiago732.kingdomofarcanum.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -164,6 +165,7 @@ class CharacterDetailViewModel @Inject constructor(
             return
         }
 
+        Logger.e("Error in CharacterDetailViewModel: ${e.message}", e)
         if (isNetworkError(e)) {
             _error.value = R.string.error_network
         } else {

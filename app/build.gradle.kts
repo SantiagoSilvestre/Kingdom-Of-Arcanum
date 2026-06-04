@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt)
 }
@@ -28,9 +29,6 @@ android {
             localProperties.load(localPropertiesFile.inputStream())
         }
 
-        resValue("string", "default_web_client_id", localProperties.getProperty("DEFAULT_WEB_CLIENT_ID", ""))
-        resValue("string", "google_app_id", localProperties.getProperty("GOOGLE_APP_ID", ""))
-        resValue("string", "google_api_key", localProperties.getProperty("GOOGLE_API_KEY", ""))
     }
 
     buildTypes {
@@ -41,6 +39,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Habilita Crashlytics em release (opcional, pode deixar true por padrão)
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
         }
     }
     compileOptions {
@@ -51,6 +53,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        resValues = true
     }
 }
 
@@ -85,9 +88,12 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
     implementation(libs.play.services.auth)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.firebase.ai)
+    implementation(libs.firebase.appcheck)
     implementation(libs.firebase.appcheck.playintegrity)
     debugImplementation(libs.firebase.appcheck.debug)
     testImplementation(libs.junit)

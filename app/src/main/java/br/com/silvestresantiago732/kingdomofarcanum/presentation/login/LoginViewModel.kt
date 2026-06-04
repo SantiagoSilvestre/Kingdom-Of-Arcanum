@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.AuthRepository
+import br.com.silvestresantiago732.kingdomofarcanum.util.Logger
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -66,6 +67,7 @@ class LoginViewModel @Inject constructor(
             _loginResult.value = result
         } else {
             val exception = result.exceptionOrNull()
+            Logger.e("Login failed", exception)
             if (isNetworkError(exception)) {
                 _error.value = R.string.error_network
             } else {

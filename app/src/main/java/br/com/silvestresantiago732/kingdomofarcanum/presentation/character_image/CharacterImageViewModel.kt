@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.silvestresantiago732.kingdomofarcanum.R
 import br.com.silvestresantiago732.kingdomofarcanum.domain.repository.CharacterRepository
+import br.com.silvestresantiago732.kingdomofarcanum.util.Logger
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
-import com.google.firebase.ai.type.GenerativeBackend
 import com.google.firebase.ai.type.ImagePart
 import com.google.firebase.ai.type.ResponseModality
 import com.google.firebase.ai.type.generationConfig
@@ -52,8 +52,8 @@ class CharacterImageViewModel @Inject constructor(
                     Create the image to go alongside your description.
                 """.trimIndent()
 
-                val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
-                    modelName = "gemini-2.5-flash-image",
+                val model = Firebase.ai.generativeModel(
+                    modelName = "gemini-1.5-flash",
                     // Configure the model to respond with text and images (required)
                     generationConfig = generationConfig {
                         responseModalities = listOf(ResponseModality.TEXT, ResponseModality.IMAGE) }
@@ -124,7 +124,7 @@ class CharacterImageViewModel @Inject constructor(
             return
         }
 
-        android.util.Log.e("CharacterImageVM", "Error in ViewModel: ${e.message}", e)
+        Logger.e("Error in ViewModel: ${e.message}", e)
         val errorRes = if (isNetworkError(e)) {
             R.string.error_network
         } else {

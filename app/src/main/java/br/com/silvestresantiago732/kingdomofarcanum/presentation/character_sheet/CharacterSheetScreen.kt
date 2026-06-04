@@ -285,6 +285,7 @@ fun CharacterSheetScreen(
                             .fillMaxSize()
                             .padding(padding)
                             .padding(16.dp)
+                            .verticalScroll(rememberScrollState())
                             .imePadding(),
                         verticalArrangement = Arrangement.spacedBy(20.dp)
                     ) {
