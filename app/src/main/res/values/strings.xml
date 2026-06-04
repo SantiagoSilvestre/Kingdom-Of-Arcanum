@@ -12,12 +12,10 @@
     <string name="login_data_deletion">Data Deletion Request</string>
     <string name="login_privacy_policy">Privacy Policy</string>
     <string name="login_forgot_password">Forgot password?</string>
+    <!-- Removido IDs expostos - agora via resValue -->
     <string name="login_error_msg">Error logging in: incorrect email or password</string>
     <string name="login_google_failed">Google login failed</string>
     <string name="login_google_no_id_token">Google login failed</string>
-    <string name="default_web_client_id" translatable="false">561921512655-02afq638tkqrunfa4j5shfdb8fans5r7.apps.googleusercontent.com</string>
-    <string name="google_app_id" translatable="false">1:561921512655:android:c98a58e8b8c2c6d4</string>
-    <string name="google_api_key" translatable="false">AIzaSyA7gsxG6KgSuvFcI2vyE1fZSNgDhfp3zpg</string>
 
     <!-- Register Screen -->
     <string name="register_title">Create Account</string>
